@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit Item</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <label for="moviename">Movie Name</label><br>
+    <input type="text" id="moviename" name="moviename" value="{{ item[1] }}"><br><br>
+    <label for="description">Description</label><br>
+    <textarea id="description" name="description">{{ item[2] }}</textarea><br><br>
+    <label for="poster">Poster</label><br>
+    <input type="text" id="poster" name="poster" value="{{ item[3] }}"><br><br>
+    <label for="trailer_link">Trailer Link</label><br>
+    <input type="text" id="trailer_link" name="trailer_link" value="{{ item[4] }}"><br><br>
+    <label for="cast_names">Cast Names</label><br>
+    <input type="text" id="cast_names" name="cast_names" value="{{ item[5] }}"><br><br>
+    <label for="price">Price</label><br>
+    <input type="text" id="price" name="price" value="{{ item[6] }}"><br><br>
+    <input type="submit" value="Save Changes">
+  </form>
+{% endblock %}

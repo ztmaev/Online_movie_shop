@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Add Item</h2>
+<form action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data">
+  <table>
+    <tr>
+      <td><label for="name">Name:</label></td>
+      <td><input type="text" id="name" name="moviename" required></td>
+    </tr>
+    <tr>
+      <td><label for="description">Description:</label></td>
+      <td><textarea id="description" name="description" required></textarea></td>
+    </tr>
+    <tr>
+      <td><label for="price">Price:</label></td>
+      <td><input type="number" id="price" name="price" step="0.01" min="0" required></td>
+    </tr>
+    <tr>
+      <td><label for="trailer">Trailer Link:</label></td>
+      <td><input type="text" id="trailer" name="trailer" required></td>
+    </tr>
+    <tr>
+      <td><label for="image">Image:</label></td>
+      <td><input type="text" id="image" name="image" accept="image/*" required></td>
+    </tr>
+    <tr>
+      <td><label for="cast">Cast:</label></td>
+      <td><textarea id="cast" name="cast" required></textarea></td>
+    </tr>
+  </table>
+
+  <input type="submit" value="Add Item">
+</form>
+
+{% endblock %}

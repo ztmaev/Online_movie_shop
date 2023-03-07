@@ -1,0 +1,53 @@
+{% block head %}
+<title>{{item.moviename}}</title>
+<style>
+  .alternate-body {
+  position: relative;
+  z-index: 1;
+    margin-left: 65px;
+}
+
+.alternate-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('{{item.poster}}');
+  filter: blur(5px);
+  -webkit-filter: blur(5px); /* for Safari */
+  z-index: -1;
+}
+.sidebar{
+  z-index: 2;
+}
+
+</style>
+<div class="alternate-body-content">
+{% endblock %}
+{% extends "base.html" %}
+
+{% block content %}
+<a href="{{ url_for('cart') }}"> <button>Cart ({{ cart_count() }})</button></a>
+<a href="{{ url_for('history') }}"> <button>Purchase history</button></a>
+<a href="{{ url_for('index') }}"> <button>Homepage</button></a>
+
+  <h2>{{ item.moviename }}</h2>
+<iframe style="width: 700; height: 393.75" src="{{ item.trailer_link }}"
+        allowfullscreen style="margin-right: 20px "></iframe>
+<div style="margin: 10px">
+
+
+  <p>{{ item.description }}</p>
+  <p><strong>Cast:</strong> {{ item.cast_names }}</p>
+  <p><strong>Price:</strong> {{ item.price }} Ksh</p>
+  <p><strong>Trailer:</strong> <a href="{{ item.trailer }}">{{ item.trailer_link }}</a></p>
+
+        <form action="{{ url_for('add_to_cart') }}" method="POST">
+          <input type="hidden" name="item_id" value="{{ item[0] }}">
+          <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+{% endblock %}
+</div>

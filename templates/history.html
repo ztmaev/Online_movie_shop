@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+    .container {
+        text-align: center;
+    }
+    .container table {
+        margin: 0 auto;
+</style>
+{% endblock %}
+{% block content %}
+ {% if items %}
+    <div class="container">
+        <h1>Order History</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <th scope="col">Movie Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }} Ksh</td>
+                    <td>{{ item[2] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="container">
+        <h1>Order History</h1>
+        <p>You have no order history.</p>
+    </div>
+{% endif %}
+{% endblock %}

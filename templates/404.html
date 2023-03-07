@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>page Not found</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+        body{
+            background-color: #191919;
+            text-align: center;
+            display: grid;
+            color: #ffffff;
+            font-family: "Poppins", sans-serif;
+        }
+
+        h1 {
+            font-size: 200px;
+            position: center;
+            margin-top: 15%;
+        }
+        .not-found{
+            font-size: 30px;
+            position: center;
+        }
+        .link button{
+            padding: 5px 10px 5px 10px;
+            color: #191919;
+            font-size: 20px;
+            cursor: pointer;
+            border: transparent;
+            border-radius: 20px;
+        }
+        .link button:hover{
+            background-color: #626262;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<h1 class="404">404</h1>
+<p class="not-found">page not found</p>
+<a class="link" href="{{ url_for('index') }}"> <button>Homepage</button></a>
+</body>
+</html>

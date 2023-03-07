@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .cart-full li{
+    border: 2px solid purple;
+    border-radius: 5px;
+    margin: 5px auto;
+    padding: 10px;
+    width: fit-content;
+  }
+  .check-out{
+    margin: 0 auto;
+    width: fit-content;
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+  <h1>Your Cart</h1>
+  {% if items %}
+<div class="cart-full">
+    <ul style="list-style: none; ">
+    {% for item in items %}
+      {% set item_id = item[0] %}
+      <li>
+
+        <a href="{{ url_for('item', item_id=item[0]) }}"><p style="text-decoration: underline; color: white">{{item[1]}}</p></a>
+        price: {{ item[2] }} Ksh
+        <form method="POST" action="{{ url_for('remove_from_cart', item_id=item_id) }}">
+
+          <button type="submit">Remove from Cart</button>
+        </form>
+      </li>
+    {% endfor %}
+    </ul>
+    <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
+      <button type="submit">Checkout</button>  {{total}} Ksh
+    </form>
+    <br>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="banner">
+    <h1>{{ session['username'] }}</h1>
+
+</div>
+<div class="movie-list">
+    {% if session['admin'] %}
+        <p>You are an admin.</p>
+        <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+    {% endif %}
+    <br>
+
+    <div class="item-list">
+        {% for item in items %}
+            <div class="item">
+                <a href="{{ url_for('item', item_id=item[0]) }}"><h2 class="headings">{{ item[1] }}</h2></a>
+                <img src="{{ item[3] }}" alt="{{ item[1] }} poster">
+                <p id="description">{{ item[2] }}</p>
+                <p id="cast">Cast: {{ item[5] }}</p>
+                <p>Price: {{ item[6] }} Ksh</p>
+                    {% if item[0] in purchased_items %}
+                        <p class="owned">Owned</p>
+                    {% else %}
+
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                            <input type="hidden" name="item_id" value="{{ item[0] }}">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+
+                    {% endif %}
+
+            </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

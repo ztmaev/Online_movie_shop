@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Search Results</h1>
+
+  {% if movies %}
+    <ul>
+      {% for movie in movies %}
+        <li class="search">
+          <p>id: {{ movie['item_id'] }}</p>
+          <img src="{{ movie['poster'] }}" alt="{{ movie['moviename'] }}">
+          <h2>{{ movie['moviename'] }}</h2>
+          <p>{{ movie['description'] }}</p>
+          <a href="{{ movie['trailer_link'] }}">Watch Trailer</a>
+          <p>Cast: {{ movie['cast_names'] }}</p>
+          <p>Price: {{ movie['price'] }}</p>
+          <form action="{{ url_for('add_to_cart') }}" method="POST">
+            <input type="hidden" name="item_id" value="{{ movie['item_id'] }}">
+            <button type="submit">Add to Cart</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No movies found.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+.banner{
+    width: 99%;
+    height: 45vh;
+    background: #312f2f;
+    align-items: center;
+    text-align: center;
+    margin: 7px auto;
+    padding-right: -5px;
+    border-radius: 10px;
+}
+.movie-list{
+    margin-top: -20px;
+}
+.owned{
+    width: 100%;
+    background: green;
+    text-align: center;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 5px;
+}
+.item h2{
+    height: 65px;
+    align-items: center;
+    text-align: center;
+}
+.item form{
+    margin-top: 10px;
+    float: bottom;
+}
