@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-
+{% block head %}
+<title>Add Item</title>
+{% endblock %}
 {% block content %}
 <h2>Add Item</h2>
 <form action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data">

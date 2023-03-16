@@ -1,20 +1,33 @@
-{% extends 'base.html' %}
+{% extends 'admin_stock.html' %}
+{% block title %}
+  <title>Editing Item: {{ item[0] }}</title>
+{% endblock %}
+{% block nav%}
+  <li><i class='bx bx-chevron-right' ></i></li>
+  <li>
+    <a class="active" href="{{ url_for('item_edit', item_id=item[0]) }}"> Edit</a>
+    <li><i class='bx bx-chevron-right' ></i></li>
+    <li><a class="active" href="{{ url_for('item_edit', item_id=item[0]) }}">{{ item[0] }}</a></li>
 
-{% block content %}
-  <h1>Edit Item</h1>
-  <form method="POST" enctype="multipart/form-data">
+  </li>         
+{% endblock %}
+{% block main %}
+  <form method="POST" enctype="multipart/form-data" class="edit-form">
+    <h1>Edit Item</h1>
+    <div class="content">
     <label for="moviename">Movie Name</label><br>
-    <input type="text" id="moviename" name="moviename" value="{{ item[1] }}"><br><br>
+    <input type="text" id="moviename" name="moviename" value="{{ item[1] }}"><br>
     <label for="description">Description</label><br>
-    <textarea id="description" name="description">{{ item[2] }}</textarea><br><br>
+    <input type="text" id="description" name="description" value="{{ item[2] }}"><br>
     <label for="poster">Poster</label><br>
-    <input type="text" id="poster" name="poster" value="{{ item[3] }}"><br><br>
+    <input type="text" id="poster" name="poster" value="{{ item[3] }}"><br>
     <label for="trailer_link">Trailer Link</label><br>
-    <input type="text" id="trailer_link" name="trailer_link" value="{{ item[4] }}"><br><br>
+    <input type="text" id="trailer_link" name="trailer_link" value="{{ item[4] }}"><br>
     <label for="cast_names">Cast Names</label><br>
-    <input type="text" id="cast_names" name="cast_names" value="{{ item[5] }}"><br><br>
+    <input type="text" id="cast_names" name="cast_names" value="{{ item[5] }}"><br>
     <label for="price">Price</label><br>
-    <input type="text" id="price" name="price" value="{{ item[6] }}"><br><br>
-    <input type="submit" value="Save Changes">
+    <input type="text" id="price" name="price" value="{{ item[6] }}"><br>
+    <input class="save" type="submit" value="Save Changes">
+    </div>
   </form>
 {% endblock %}

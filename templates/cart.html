@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
+    <title>Cart</title>
 <style>
   .cart-full li{
     border: 2px solid purple;
@@ -23,9 +24,11 @@
     {% for item in items %}
       {% set item_id = item[0] %}
       <li>
-
-        <a href="{{ url_for('item', item_id=item[0]) }}"><p style="text-decoration: underline; color: white">{{item[1]}}</p></a>
-        price: {{ item[2] }} Ksh
+            <a href="{{ url_for('item', item_id=item[0]) }}"><p style="text-decoration: underline; color: white">{{item[1]}}</p></a>
+            <img src="{{ item[2] }}" alt="poster" width="100" height="100">
+            <p class="description">{{ item[3] }}</p>
+            <p>price: {{ item[4] }} Ksh</p>
+            <a href="{{ item[5] }}">Watch Trailer</a>
         <form method="POST" action="{{ url_for('remove_from_cart', item_id=item_id) }}">
 
           <button type="submit">Remove from Cart</button>

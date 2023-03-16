@@ -1,0 +1,501 @@
+main{
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+	text-decoration: none;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+table {
+    border: none;
+    border-collapse:collapse;
+    padding:5px;
+	color: #353535;
+}
+table th {
+    border: none;
+    padding:5px;
+    background: none;
+    color: #353535;
+}
+table tr{
+	border-bottom: 1px solid var(--dark-grey);
+}
+table td {
+    border: none;
+    text-align:left;
+    padding:5px;
+    background: none;
+    color: #353535;
+}
+.head-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    grid-gap: 16px;
+    flex-wrap: wrap;
+}.head-title .left .breadcrumb {
+    display: flex;
+    align-items: center;
+    grid-gap: 16px;
+}
+:root {
+	--poppins: 'Poppins', sans-serif;
+	--lato: 'Lato', sans-serif;
+
+	--light: #F9F9F9;
+	--blue: #3C91E6;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #DB504A;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+}
+main {
+	width: 100%;
+	padding: 6px 24px;
+	font-family: var(--poppins);
+	max-height: calc(100vh - 0px);
+	overflow-y: auto;
+}
+main .head-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	grid-gap: 16px;
+	flex-wrap: wrap;
+}
+main .head-title .left h1 {
+	font-size: 36px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	color: var(--opposite-color);
+}
+main .head-title .left .breadcrumb {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+}
+main .head-title .left .breadcrumb li {
+	color: var(--dark);
+}
+main .head-title .left .breadcrumb li a {
+	color: var(--blue);
+	
+}
+main .head-title .left .breadcrumb li a.active {
+	color: var(--blue);
+	pointer-events: unset;
+}
+main .head-title .btn-download {
+	height: 36px;
+	padding: 0 16px;
+	border-radius: 36px;
+	background: var(--blue);
+	color: var(--light);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	grid-gap: 10px;
+	font-weight: 500;
+}
+main .box-info {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-gap: 24px;
+	margin-top: 36px;
+}
+main .box-info li {
+	padding: 24px;
+	background: var(--body-color2);
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	grid-gap: 24px;
+}
+.bx-chevron-right:before {
+    content: "\ea50";
+	color: var(--dark-grey);
+}
+main .box-info li .bx {
+	width: 80px;
+	height: 80px;
+	border-radius: 10px;
+	font-size: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+main .box-info li:nth-child(1) .bx {
+	background: var(--light-blue);
+	color: var(--blue);
+}
+main .box-info li:nth-child(2) .bx {
+	background: var(--light-yellow);
+	color: var(--yellow);
+}
+main .box-info li:nth-child(3) .bx {
+	background: var(--light-orange);
+	color: var(--orange);
+}
+main .box-info li .text h3 {
+	font-size: 24px;
+	font-weight: 600;
+	color: var(--opposite-color);
+}
+main .box-info li .text p {
+	color: var(--opposite-color);
+}
+main .table-data {
+	display: flex;
+	flex-wrap: wrap;
+	grid-gap: 24px;
+	margin-top: 24px;
+	width: 100%;
+	color: var(--dark);
+}
+main .table-data > div {
+	border-radius: 20px;
+	background: var(--body-color2);
+	padding: 24px;
+	overflow-x: auto;
+}
+main .table-data .head {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+	margin-bottom: 24px;
+}
+main .table-data .head h3 {
+	margin-right: auto;
+	font-size: 24px;
+	font-weight: 600;
+	color: var(--opposite-color);
+}
+main .table-data .head .bx {
+	cursor: pointer;
+}
+
+main .table-data .order {
+	flex-grow: 1;
+	flex-basis: 500px;
+}
+main .table-data .order table {
+	width: 100%;
+	border-collapse: collapse;
+}
+main .table-data .order table th {
+	color: var(--opposite-color);
+	padding-bottom: 12px;
+	font-size: 13px;
+	text-align: left;
+	border-bottom: 1px solid var(--dark-grey);
+}
+main .table-data .order table td {
+	padding: 10px 10px;
+	color: var(--opposite-color);
+}
+main .table-data .order table tr td:first-child {
+	display: flex;
+	align-items: center;
+	grid-gap: 12px;
+	padding-left: 6px;
+
+}
+main .table-data .order table tr td:nth-child(5),
+main .table-data .order table tr th:nth-child(5) {
+text-align: center;
+}
+main .table-data .order table tr td:nth-child(4),
+main .table-data .order table tr th:nth-child(4) {
+	text-align: center;
+}
+main .table-data .order table td img {
+	width: 50px;
+	height: 50px;
+	border-radius: 2px;
+	object-fit: cover;
+}
+main .table-data .order table tbody tr:hover {
+
+}
+main .table-data .order table tr td .status {
+	font-size: 10px;
+	padding: 6px 16px;
+	color: var(--light);
+	border-radius: 20px;
+	font-weight: 700;
+}
+main .table-data .order table tr td .status.completed {
+	background: var(--blue);
+	font-size: 12px;
+}
+main .table-data .order table .delete, main .table-data .order table .update{
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	color: var(--light);
+}
+/*########################################*/
+/* Customize the label (the container) */
+.container {
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .container input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+	position: absolute;
+	top: 2px;
+	left: -21%;
+	height: 25px;
+	width: 25px;
+	background-color: var(--dark-grey);
+	border-radius: 5px;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .container:hover input ~ .checkmark {
+	background-color: #ccc;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .container input:checked ~ .checkmark {
+	background-color: #2196F3;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .container input:checked ~ .checkmark:after {
+	display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .container .checkmark:after {
+	left: 9px;
+	top: 5px;
+	width: 5px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+  }
+main .table-data .order table .checkbox {
+}
+/*########################################*/
+
+main .table-data .order table .update {
+	background: var(--blue);
+}
+main .table-data .order table .update:hover{
+	background: #273e84;
+}
+main .table-data .order table .delete{
+	background: var(--red);
+}
+main .table-data .order table .delete:hover{
+	background: #782724;
+}
+main .table-data .order table tr td .status.process {
+	background: var(--yellow);
+}
+main .table-data .order table tr td .status.pending {
+	background: var(--orange);
+}
+main .table-data .todo {
+	flex-grow: 1;
+	flex-basis: 300px;
+	height: 640px
+}
+main .table-data .usertd{
+	flex-grow: 1;
+	height: 300px;
+	flex-basis: 300px;
+}
+main .table-data .todo .todo-list {
+	width: 100%;
+}
+main .table-data .todo .todo-list li {
+	width: 100%;
+	margin-bottom: 16px;
+	background: var(--grey);
+	border-radius: 10px;
+	padding: 14px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+main .table-data .todo .todo-list li .bx {
+	cursor: pointer;
+}
+main .table-data .todo .todo-list li.completed {
+	border-left: 10px solid var(--blue);
+}
+main .table-data .todo .todo-list li.not-completed {
+	border-left: 10px solid var(--orange);
+}
+main .table-data .todo .todo-list li:last-child {
+	margin-bottom: 0;
+}
+
+
+#form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+  
+  #form-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--opposite-color2);
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  #form-container h2 {
+    margin-top: 0;
+	text-align: center;
+  	color: var(--text-color);
+  }
+  
+  #form-container label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  #form-container input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--text-color);
+
+  }
+  
+  #form-container button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+  }
+  
+  #form-container button:hover {
+    cursor: pointer;
+  }
+  .add-item{
+	cursor: pointer;
+	color: #ffff;
+	background: var(--blue);
+	padding: 5px;
+	border-radius: 5px;
+  }
+  .add-item:hover{
+	background: #0cd3b8;
+  }
+  #form-container #close{
+    position: absolute;
+    top: 1%;
+    right: -2%;
+	color: #ffff;
+	background-color: var(--dark-grey);
+	text-align: center;
+	border-radius: 50%;
+  }
+  .edit-form{
+	border-radius: 20px;
+    background: var(--body-color2);
+  	color: var(--opposite-color);
+    padding: 20px;
+    overflow-x: auto;
+	margin-top: 20px;
+  }
+  .edit-form .content{
+	display: grid;
+	margin-top: 20px;
+  }
+  .edit-form .content label {
+	font-weight: bold;
+    padding: 0;
+	margin: -10px 2px -20px 1px;
+}
+.edit-form .content input {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 0px;
+	border-radius: 5px;
+	padding-bottom: -20px;
+	border: 1px solid var(--opposite-color);
+}
+.edit-form .content .save{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: white;
+	background: var(--blue);
+	cursor: pointer;
+
+}
+.edit-form .content .save:hover{
+	background: #0cd3b8;
+}
+#open-form-btn{
+	cursor: pointer;
+	color: #ffff;
+	background: var(--blue);
+	padding: 5px;
+	border: none;
+	border-radius: 10px;
+  }
+  #open-form-btn:hover{
+	background: #0cd3b8;
+  }
+  .edit-form .content .cancel{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: white;
+	background: var(--red);
+	cursor: pointer;
+}

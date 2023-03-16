@@ -11,6 +11,7 @@
 :root {
   /* ===== Colors ===== */
   --body-color: #0d1117;
+  --body-color2: #3a3b3c;
   --sidebar-color: #161b22;
   --primary-color: #3a3b3c;
   --primary-color-light: #3a3b3c;
@@ -43,6 +44,7 @@ body {
 
 body.dark {
   --body-color: #e4e9f7;
+  --body-color2: #fff;
   --sidebar-color: #fff;
   --primary-color: #9f5cfe;;
   --primary-color-light: #f6f5ff;
@@ -484,9 +486,9 @@ table td {
     color: #ffffff;
 }
 .item {
-    background-color: #505050;
-    color: #ffffff;
-    border: 1px solid #b3adad;
+    background-color: var(--opposite-color2);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
     border-radius: 5px;
     padding: 10px;
     margin: 0 auto;
@@ -511,8 +513,8 @@ table td {
 }
 .item a .headings{
     text-decoration: none;
-    color: white;
-    background: #191919;
+    color: var(--body-color2);
+    background: var(--text-color);
     border: 1px solid #b3adad;
     border-radius: 5px;
     text-align: center;
@@ -543,6 +545,16 @@ table td {
   white-space: normal; /* allow the text to wrap to the next line */
   line-height: 1.2; /* set the line height of the text */
   margin-bottom: 10px; /* add a gap between the description and the rest of the content */
+}
+.item form{
+  float: right;
+}
+.item form button{
+  color: var(--body-color2);
+  background: var(--text-color);
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  padding: 4px;
 }
 button{
   cursor: pointer;

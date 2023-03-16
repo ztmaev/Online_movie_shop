@@ -1,10 +1,11 @@
-import sqlite3
 import datetime
+import sqlite3
 from flask import Flask, g, request, session, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
+
 
 def get_db():
     if 'db' not in g:
@@ -12,10 +13,12 @@ def get_db():
         g.db.row_factory = sqlite3.Row
     return g.db
 
+
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g, 'db'):
         g.db.close()
+
 
 # Sample users
 with app.app_context():
@@ -35,6 +38,7 @@ with app.app_context():
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 @app.route('/')
 def index():
     if 'username' in session:
@@ -52,16 +56,25 @@ def index():
             cursor.execute('SELECT item_id FROM history WHERE user_id = ?', (session['username'],))
             purchased_items = [r[0] for r in cursor.fetchall()]
 
+            # Check if the movie is in the cart
+            cursor.execute('SELECT item_id FROM cart WHERE user_id = ?', (session['username'],))
+            cart_items = [r[0] for r in cursor.fetchall()]
+
             # Add purchased items to session
             session['purchased_items'] = purchased_items
 
+            # 1 random movie
+            cursor.execute('SELECT * FROM stock ORDER BY RANDOM() LIMIT 1')
+            banner = cursor.fetchone()
+
             conn.close()
-            print(purchased_items)
-            return render_template('index.html', items=items, purchased_items=purchased_items)
+            return render_template('index.html', items=items, purchased_items=purchased_items, cart_items=cart_items,
+                                   banner=banner)
 
 
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/owned')
 def owned():
@@ -70,12 +83,13 @@ def owned():
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM history WHERE user_id = ?', (session['username'],))
         items = cursor.fetchall()
-        #remove duplicates
+        # remove duplicates
         items = list(set(items))
         conn.close()
         return render_template('owned.html', items=items)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/search/')
 def search():
@@ -84,8 +98,35 @@ def search():
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM stock WHERE moviename LIKE ?', ('%{}%'.format(search_term),))
     movies = cursor.fetchall()
+    # get total number of items
+    cursor.execute('SELECT COUNT(*) FROM stock')
+    total_items = cursor.fetchone()
+    item_count = total_items[0]
+
+    # get total number of movies owned by user
+    user_id = session['username']
+    cursor.execute('SELECT COUNT(*) FROM history WHERE user_id = ?', (user_id,))
+    total_items = cursor.fetchone()
+    owned = total_items[0]
+
+    # get the total amount spent by user
+    cursor.execute('SELECT SUM(price) FROM history WHERE user_id = ?', (user_id,))
+    total_items = cursor.fetchone()
+    spend = total_items[0]
+
+    # get the items in the user's cart
+    cursor.execute('SELECT item_id FROM cart WHERE user_id = ?', (user_id,))
+    cart_items = [r[0] for r in cursor.fetchall()]
+    session['cart_items'] = cart_items
+
+    # get a list of movies owned by user
+    cursor.execute('SELECT item_id FROM history WHERE user_id = ?', (user_id,))
+    purchased_items = [r[0] for r in cursor.fetchall()]
+    session['purchased_items'] = purchased_items
+
     conn.close()
-    return render_template('search.html', movies=movies)
+
+    return render_template('search.html', movies=movies, search_term=search_term, item_count=item_count, owned=owned, spend=spend, purchased_items=purchased_items, cart_items=cart_items)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -130,6 +171,7 @@ def signup():
     else:
         return render_template('signup.html')
 
+
 @app.route('/changepassword', methods=['GET', 'POST'])
 def change_password():
     if request.method == 'POST':
@@ -161,9 +203,13 @@ def change_password():
         conn.close()
 
         flash('Password updated successfully')
-        return redirect(url_for('login'))
+        # login
+        session['username'] = username
+        session['admin'] = False
+        return redirect(url_for('index'))
     else:
         return render_template('change_password.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -187,7 +233,6 @@ def login():
         return render_template('login.html')
 
 
-
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     if request.method == 'POST':
@@ -203,7 +248,61 @@ def admin_dashboard():
     if 'username' in session and session['admin']:
         conn = get_db()
         cursor = conn.cursor()
+        # Get the 7 last purchases from the history table
+        cursor.execute('SELECT * FROM history ORDER BY date DESC LIMIT 7')
+        purchases = cursor.fetchall()
 
+        # Get 8 most repeated item_id from the history table
+        cursor.execute(
+            'SELECT history.item_id, stock.moviename, COUNT(*) AS count FROM history INNER JOIN stock ON history.item_id = stock.item_id GROUP BY history.item_id, stock.moviename ORDER BY count DESC LIMIT 8')
+        most_purchased = cursor.fetchall()
+
+        times_purchased = []
+        movies_purchased = []
+
+        for item in most_purchased:
+            times_purchased.append(item[2])
+            movies_purchased.append(item[1])
+
+        # get movie name of most purchased items from stock table
+
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
+
+        # Get the list of users from the database
+        cursor.execute('SELECT username, is_admin FROM users')
+        users = cursor.fetchall()
+
+        # Get all items from the stock table
+        cursor.execute('SELECT * FROM stock')
+        items = cursor.fetchall()
+
+        conn.close()
+
+        return render_template('admin_dashboard.html', users=users, items=items, purchases=purchases,
+                               user_count=user_count, item_count=item_count, purchase_count=purchase_count,
+                               most_purchased=most_purchased)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/admin/users', methods=['GET', 'POST'])
+def admin_users():
+    if 'username' in session and session['admin']:
+        conn = get_db()
+        cursor = conn.cursor()
         if request.method == 'POST':
             # Handle edit/delete user request
             if 'edit-user' in request.form:
@@ -218,6 +317,7 @@ def admin_dashboard():
 
                 # Update the session variable for the user's role
                 session['admin'] = is_admin if username == session['username'] else session['admin']
+                return redirect(url_for('admin_users'))
 
             elif 'delete-user' in request.form:
                 # Get the username to be deleted from the form
@@ -227,31 +327,82 @@ def admin_dashboard():
                 cursor.execute('DELETE FROM users WHERE username = ?', (username,))
                 conn.commit()
                 flash('User deleted successfully.')
+                return redirect(url_for('admin_users'))
 
-            elif 'new-item' in request.form:
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+        # Get the list of users from the database
+        cursor.execute('SELECT username, is_admin FROM users')
+        users = cursor.fetchall()
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+        # top 3 users with most purchases
+        cursor.execute(
+            'SELECT user_id, SUM(price) AS total_purchases FROM history GROUP BY user_id ORDER BY total_purchases DESC LIMIT 3;')
+        top_users = cursor.fetchall()
+
+        # get the number of purchases for each user
+        for index, user in enumerate(top_users):
+            user_id = user[0]
+            cursor.execute('SELECT COUNT(*) FROM history WHERE user_id = ?', (user_id,))
+            purchase_count = cursor.fetchone()[0]
+            top_users[index] = (user[0], user[1], purchase_count)
+
+        return render_template('admin_users.html', users=users, user_count=user_count, top_users=top_users,
+                               item_count=item_count, purchase_count=purchase_count)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/admin/stock', methods=['GET', 'POST'])
+def admin_stock():
+    if 'username' in session and session['admin']:
+        conn = get_db()
+        cursor = conn.cursor()
+
+        if request.method == 'POST':
+            if 'new-item' in request.form:
                 # Get the new item details from the form
                 moviename = request.form['moviename']
                 price = request.form['price']
                 description = request.form['description']
 
                 # Insert the new item into the stock table
-                cursor.execute('INSERT INTO stock (moviename, price, description) VALUES (?, ?, ?)', (moviename, price, description))
+                cursor.execute('INSERT INTO stock (moviename, price, description) VALUES (?, ?, ?)',
+                               (moviename, price, description))
                 conn.commit()
                 flash('New item added successfully.')
-
-        # Get the list of users from the database
-        cursor.execute('SELECT username, is_admin FROM users')
-        users = cursor.fetchall()
-
+                return redirect(url_for('admin_stock'))
+        conn = get_db()
+        cursor = conn.cursor()
         # Get all items from the stock table
         cursor.execute('SELECT * FROM stock')
         items = cursor.fetchall()
-
-        conn.close()
-
-        return render_template('admin_dashboard.html', users=users, items=items)
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
+        return render_template('admin_stock.html', items=items, item_count=item_count, user_count=user_count,
+                               purchase_count=purchase_count)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/admin/new_item', methods=['GET', 'POST'])
 def new_item():
@@ -269,12 +420,13 @@ def new_item():
             cast_names = request.form['cast']
 
             # Insert the new item into the stock table
-            cursor.execute('INSERT INTO stock (moviename, description, price, trailer_link, poster, cast_names) VALUES (?, ?, ?, ?, ?, ?)',
-                           (moviename, description, price, trailer_link, poster, cast_names))
+            cursor.execute(
+                'INSERT INTO stock (moviename, description, price, trailer_link, poster, cast_names) VALUES (?, ?, ?, ?, ?, ?)',
+                (moviename, description, price, trailer_link, poster, cast_names))
             conn.commit()
             flash('New item added successfully.')
 
-            return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('admin_stock'))
 
         conn.close()
 
@@ -318,7 +470,9 @@ def cart():
         username = session['username']
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT stock.item_id, stock.moviename, stock.price FROM cart JOIN stock ON cart.item_id=stock.item_id WHERE cart.user_id=?', (username,))
+        cursor.execute(
+            'SELECT stock.item_id, stock.moviename, stock.poster, stock.description, stock.price, stock.trailer_link FROM cart JOIN stock ON cart.item_id=stock.item_id WHERE cart.user_id=?',
+            (username,))
         items = cursor.fetchall()
         item_id = cursor.fetchone()
         session['cart_items'] = items
@@ -330,6 +484,7 @@ def cart():
         return render_template('cart.html', items=items, total=total, item_id=item_id)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/remove-from-cart/<int:item_id>', methods=['POST'])
 def remove_from_cart(item_id):
@@ -345,6 +500,7 @@ def remove_from_cart(item_id):
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if 'username' in session:
@@ -352,13 +508,15 @@ def checkout():
         cart_items = session.get('cart_items', [])
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT stock.price FROM cart JOIN stock ON cart.item_id=stock.item_id WHERE cart.user_id=?', (username,))
+        cursor.execute('SELECT stock.price FROM cart JOIN stock ON cart.item_id=stock.item_id WHERE cart.user_id=?',
+                       (username,))
         prices = cursor.fetchall()
         total = sum([int(price[0].replace('$', '')) for price in prices])
         conn.close()
         return render_template('checkout.html', items=cart_items, total=total)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/complete_checkout', methods=['POST'])
 def complete_checkout():
@@ -372,11 +530,13 @@ def complete_checkout():
         cart_items = cursor.fetchall()
         for item in cart_items:
             item_id = item[0]
-            quantity = 1 # assuming quantity is always 1 for now
+            quantity = 1  # assuming quantity is always 1 for now
             price = int(item[2].replace('$', ''))
             total_price = price * quantity
             date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            cursor.execute('INSERT INTO history (user_id, item_id, quantity, price, total_price, date) VALUES (?, ?, ?, ?, ?, ?)', (username, item_id, quantity, price, total_price, date))
+            cursor.execute(
+                'INSERT INTO history (user_id, item_id, quantity, price, total_price, date) VALUES (?, ?, ?, ?, ?, ?)',
+                (username, item_id, quantity, price, total_price, date))
             conn.commit()
         conn.close()
         flash('Order placed successfully!', 'success')
@@ -397,7 +557,9 @@ def history():
         username = session['username']
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT stock.moviename, stock.price, history.date FROM history INNER JOIN stock ON history.item_id = stock.item_id WHERE history.user_id = ?', (username,))
+        cursor.execute(
+            'SELECT stock.moviename, stock.price, history.date FROM history INNER JOIN stock ON history.item_id = stock.item_id WHERE history.user_id = ?',
+            (username,))
         items = cursor.fetchall()
         conn.close()
         return render_template('history.html', items=items)
@@ -418,11 +580,12 @@ def cart_count():
             return count
         else:
             return 0
+
     return dict(cart_count=get_cart_count)
+
 
 @app.route('/admin/edit_item/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(item_id):
-    print(request.form)
     if 'username' in session and session['admin']:
         conn = get_db()
         cursor = conn.cursor()
@@ -441,24 +604,39 @@ def item_edit(item_id):
             trailer_link = request.form['trailer_link']
 
             # Update the item in the database
-            cursor.execute('UPDATE stock SET moviename=?, description=?, cast_names=?, price=?, poster=?, trailer_link=? WHERE item_id=?',
-                           (moviename, description, cast_names, price, poster, trailer_link, item_id))
+            cursor.execute(
+                'UPDATE stock SET moviename=?, description=?, cast_names=?, price=?, poster=?, trailer_link=? WHERE item_id=?',
+                (moviename, description, cast_names, price, poster, trailer_link, item_id))
             conn.commit()
             flash('Item updated successfully.')
 
             # Redirect to the stock list page
-            return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('admin_stock'))
 
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
         conn.close()
 
-        return render_template('item_edit.html', item=item)
+        return render_template('item_edit.html', item=item, item_count=item_count, user_count=user_count,
+                               purchase_count=purchase_count)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/admin/delete_item/<int:item_id>', methods=['POST'])
 def item_delete(item_id):
     if 'username' in session and session['admin']:
-        conn = get_db()
+        conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
 
         # Delete the item from the database
@@ -466,12 +644,14 @@ def item_delete(item_id):
         conn.commit()
         flash('Item deleted successfully.')
 
+        cursor.close()
         conn.close()
 
         # Redirect to the stock list page
         return redirect(url_for('admin_dashboard'))
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/item/<int:item_id>')
 def item(item_id):
@@ -490,6 +670,7 @@ def item(item_id):
         flash('Item not found.')
         return redirect(url_for('index'))
 
-#run the app
+
+# run the app
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

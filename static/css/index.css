@@ -1,23 +1,73 @@
 .banner{
     width: 99%;
     height: 45vh;
-    background: #312f2f;
+    background: var(--body-color2);
     align-items: center;
     text-align: center;
     margin: 7px auto;
     padding-right: -5px;
+    border-radius: 8px;
+}
+.banner img{
+    float: left;
+    position: relative;
+    width: auto;
+    margin-left: 3%;
+    height: 100%;
     border-radius: 10px;
+    padding: 6px;
+}
+.banner-heading{
+    color: var(--text-color);
+    position: absolute;
+    right: 7%;
+    z-index: 2;
+    top: 5%;
+    font-size: 30px;
+}
+#banner-cast{
+    margin-top: 20px;
+}
+.banner-price{
+    margin-top: 20px;
+}
+.banner form{
+    margin-top: 20px;
+    float: right;
+}
+.banner button {
+    color: var(--body-color2);
+    background: var(--text-color);
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid var(--body-color2);
+    border-radius: 14px;
+    position: absolute;
+    right: 2%;
+    bottom: -65%;
+}
+#banner-group {
+    position: absolute;
+    width: 42%;
+    top: 15%;
+    right: 30px;
+    text-align: left;
 }
 .movie-list{
-    margin-top: -20px;
+    margin-top: 0px;
 }
-.owned{
+.owned, .in-cart{
     width: 100%;
+    color: white;
     background: green;
     text-align: center;
     margin-top: 10px;
     padding: 2px;
+    border: 2px solid var(--text-color);
     border-radius: 5px;
+}
+.in-cart{
+    background: orange;
 }
 .item h2{
     height: 65px;

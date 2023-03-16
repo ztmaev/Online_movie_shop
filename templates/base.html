@@ -75,6 +75,20 @@
               </a>
             </li>
             {% endif %}
+              {% if session['admin'] %}
+                  <li class="nav-link">
+                      <a href="{{ url_for('admin_users') }}">
+                        <i class="bx bx-user icon"></i>
+                        <span class="text nav-text">Users</span>
+                      </a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="{{ url_for('admin_stock') }}">
+                        <i class="bx bx-folder icon"></i>
+                        <span class="text nav-text">Stock</span>
+                      </a>
+                  </li>
+                  {% endif %}
             {% endif %}
 
           </ul>

@@ -1,27 +1,77 @@
 {% extends 'base.html' %}
-
+      {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+        <title>Search Results for "{{ search_term }}"</title>
+      {% endblock %}
 {% block content %}
-  <h1>Search Results</h1>
+<div class="container-search">
+    <div>
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-store'></i>
+                <span class="text">
+                <h3>{{ item_count }}</h3>
+                <p>Movies in stock</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-box'></i>
+                <span class="text">
+                <h3>{{ owned }}</h3>
+                <p>Movies purchased</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
+                <h3> {% if not spend %} 0 {% else %}Ksh {{ spend }} {% endif %}</h3>
+                <p>Total Spent</p>
+            </span>
+            </li>
+        </ul>
+    </div>
+    <div class="container-results">
+      <h2 class="head">Search Results for "{{ search_term }}"</h2>
+      <p class="separator"></p>
 
-  {% if movies %}
-    <ul>
-      {% for movie in movies %}
-        <li class="search">
-          <p>id: {{ movie['item_id'] }}</p>
-          <img src="{{ movie['poster'] }}" alt="{{ movie['moviename'] }}">
-          <h2>{{ movie['moviename'] }}</h2>
-          <p>{{ movie['description'] }}</p>
-          <a href="{{ movie['trailer_link'] }}">Watch Trailer</a>
-          <p>Cast: {{ movie['cast_names'] }}</p>
-          <p>Price: {{ movie['price'] }}</p>
-          <form action="{{ url_for('add_to_cart') }}" method="POST">
-            <input type="hidden" name="item_id" value="{{ movie['item_id'] }}">
-            <button type="submit">Add to Cart</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No movies found.</p>
-  {% endif %}
+      {% if movies %}
+      <div class="item-list">
+          {% for movie in movies %}
+            <div class="item">
+                <a href="{{ url_for('item', item_id=movie['item_id']) }}"><h2 class="headings">{{ movie['moviename'] }}</h2></a>
+                <img src="{{ movie['poster'] }}" alt="{{ movie['moviename'] }} poster">
+                <p id="description">{{ movie['description'] }}</p>
+                <p id="cast"><strong> Cast</strong>: {{ movie['cast_names'] }}</p>
+                <p><strong> Price</strong>: {{ movie['price'] }} Ksh</p>
+
+            {% if session['admin'] %}
+                <form action="{{ url_for('item_delete', item_id=movie[0]) }}" method="post">
+                    <input class="delete" type="submit" value="Delete">
+                </form>
+                <form action="{{ url_for('item_edit', item_id=movie[0]) }}" method="get">
+                    <input class="update" type="submit" value="Edit">
+                </form>
+
+            {% else %}
+
+                {% if movie['item_id'] in cart_items %}
+                    <p class="in-cart">In Cart</p>
+
+                {% elif movie['item_id'] in purchased_items %}
+                    <p class="owned">Owned</p>
+                {% else %}
+                    <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="item_id" value="{{ movie['item_id'] }}">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No movies found.</p>
+      {% endif %}
+    </div>
+</div>
 {% endblock %}
