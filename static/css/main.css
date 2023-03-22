@@ -491,7 +491,8 @@ table td {
     border: 1px solid var(--text-color);
     border-radius: 5px;
     padding: 10px;
-    margin: 0 auto;
+
+    margin-left: 15px;
     width: 320px;
     margin-bottom: 20px;
 }
@@ -500,12 +501,18 @@ table td {
     flex-wrap: wrap;
     justify-content: center;
 }
+.item a {
+  text-decoration: none;
+  color: var(--opposite-color);
+}
 .item img {
-    width: 300px;
-    height: 168px;
+  object-fit: cover;
+  object-position: top;
+    width: 100%;
+    height: 450px;
     border-radius: 5px;
     border: none;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 10px;
 }
 .item button{
@@ -575,8 +582,16 @@ iframe{
     }
 .movie-table{
   width: 100%;
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
+}
+.empty{
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  color: var(--text-color);
+  margin-top: 18%;
+  margin-bottom: 18%;
 }

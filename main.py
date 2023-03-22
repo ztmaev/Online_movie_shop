@@ -1,11 +1,14 @@
 import datetime
 import sqlite3
+import requests
+import json
 from flask import Flask, g, request, session, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
+API_KEY = "d96c51d9aa944073eb95ae3cdccb11af"
 
 def get_db():
     if 'db' not in g:
@@ -311,6 +314,7 @@ def admin_users():
                 is_admin = True if request.form.get('is_admin') else False
 
                 # Update the user's admin status in the database
+
                 cursor.execute('UPDATE users SET is_admin = ? WHERE username = ?', (is_admin, username))
                 conn.commit()
                 flash('User information updated successfully.')
@@ -381,8 +385,7 @@ def admin_stock():
                 conn.commit()
                 flash('New item added successfully.')
                 return redirect(url_for('admin_stock'))
-        conn = get_db()
-        cursor = conn.cursor()
+
         # Get all items from the stock table
         cursor.execute('SELECT * FROM stock')
         items = cursor.fetchall()
@@ -398,6 +401,9 @@ def admin_stock():
         cursor.execute('SELECT SUM(price) FROM history')
         total_purchases = cursor.fetchone()
         purchase_count = total_purchases[0]
+        conn.close()
+
+
         return render_template('admin_stock.html', items=items, item_count=item_count, user_count=user_count,
                                purchase_count=purchase_count)
     else:
@@ -418,21 +424,109 @@ def new_item():
             trailer_link = request.form['trailer']
             poster = request.form['image']
             cast_names = request.form['cast']
+            tmdb = request.form['tmdb']
 
             # Insert the new item into the stock table
             cursor.execute(
-                'INSERT INTO stock (moviename, description, price, trailer_link, poster, cast_names) VALUES (?, ?, ?, ?, ?, ?)',
-                (moviename, description, price, trailer_link, poster, cast_names))
+                'INSERT INTO stock (moviename, description, price, trailer_link, poster, cast_names, tmdb) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (moviename, description, price, trailer_link, poster, cast_names, tmdb))
             conn.commit()
             flash('New item added successfully.')
 
             return redirect(url_for('admin_stock'))
 
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
         conn.close()
 
-        return render_template('new_item.html')
+        return render_template('new_item.html',item_count=item_count, user_count=user_count,purchase_count=purchase_count)
     else:
         return redirect(url_for('login'))
+
+@app.route('/admin/tmdb', methods=['GET', 'POST'])
+def new_item_tmdb():
+    if 'username' in session and session['admin']:
+        movie_details = None
+        if request.method == "POST":
+            movie_id = request.form["tmdb"]
+            # Build the API URL
+            url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US&append_to_response=credits,videos,keywords"
+
+            # Send a GET request to the API
+            response = requests.get(url)
+
+            # Check if the response was successful
+            if response.status_code == 200:
+                # Convert the response JSON data to a Python dictionary
+                movie_data = json.loads(response.content)
+
+                # Extract the movie details
+                name = movie_data["title"]
+                description = movie_data["overview"]
+                poster = f"https://image.tmdb.org/t/p/original{movie_data['poster_path']}"
+                cast = []
+                for cast_member in movie_data["credits"]["cast"][:5]:
+                    # Get the cast member's details
+                    person_url = f"https://api.themoviedb.org/3/person/{cast_member['id']}?api_key={API_KEY}&language=en-US"
+                    person_response = requests.get(person_url)
+                    person_data = json.loads(person_response.content)
+
+                    # Get the cast member's image
+                    profile_path = person_data["profile_path"]
+                    if profile_path is not None:
+                        profile_image = f"https://image.tmdb.org/t/p/original{profile_path}"
+                    else:
+                        profile_image = None
+
+                    # Add the cast member's name and image to the list
+                    cast.append({"name": cast_member["name"], "image": profile_image})
+                trailer = f"https://www.youtube.com/watch?v={movie_data['videos']['results'][0]['key']}"
+                tags = []
+                for keyword in movie_data["keywords"]["keywords"]:
+                    tags.append(keyword["name"])
+                categories = []
+                for genre in movie_data["genres"]:
+                    categories.append(genre["name"])
+
+                tmdb = movie_id
+
+                # Return the movie details as a dictionary
+                movie_details = {"name": name, "description": description, "poster": poster, "cast": cast,
+                                 "trailer": trailer, "tags": tags, "categories": categories, "tmdb": tmdb}
+            else:
+                flash("Error fetching movie details.")
+                return redirect(url_for("new_item"))
+                print("Error fetching movie details.")
+
+        conn = get_db()
+        cursor = conn.cursor()
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+        # get total number of users
+        cursor.execute('SELECT COUNT(*) FROM users')
+        total_users = cursor.fetchone()
+        user_count = total_users[0]
+        # get total amount in purchases
+        cursor.execute('SELECT SUM(price) FROM history')
+        total_purchases = cursor.fetchone()
+        purchase_count = total_purchases[0]
+        conn.close()
+        return render_template("new_item.html", movie_details=movie_details, item_count=item_count, user_count=user_count, purchase_count=purchase_count)
+    else:
+        return redirect(url_for('login'))
+
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -480,8 +574,24 @@ def cart():
                        (username,))
         prices = cursor.fetchall()
         total = sum([int(price[0].replace('$', '')) for price in prices])
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+
+        # get total number of movies owned by user
+        user_id = session['username']
+        cursor.execute('SELECT COUNT(*) FROM history WHERE user_id = ?', (user_id,))
+        total_items = cursor.fetchone()
+        owned = total_items[0]
+
+        # get the total amount spent by user
+        cursor.execute('SELECT SUM(price) FROM history WHERE user_id = ?', (user_id,))
+        total_items = cursor.fetchone()
+        spend = total_items[0]
+
         conn.close()
-        return render_template('cart.html', items=items, total=total, item_id=item_id)
+        return render_template('cart.html', items=items, total=total, item_id=item_id, item_count=item_count, owned=owned, spend=spend)
     else:
         return redirect(url_for('login'))
 
@@ -610,6 +720,7 @@ def item_edit(item_id):
             conn.commit()
             flash('Item updated successfully.')
 
+
             # Redirect to the stock list page
             return redirect(url_for('admin_stock'))
 
@@ -648,7 +759,7 @@ def item_delete(item_id):
         conn.close()
 
         # Redirect to the stock list page
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_stock'))
     else:
         return redirect(url_for('login'))
 

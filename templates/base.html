@@ -88,6 +88,12 @@
                         <span class="text nav-text">Stock</span>
                       </a>
                   </li>
+                  <li class="nav-link">
+                      <a href="{{ url_for('new_item') }}">
+                        <i class="bx bx-server icon"></i>
+                        <span class="text nav-text">Add Item</span>
+                      </a>
+                  </li>
                   {% endif %}
             {% endif %}
 
@@ -97,9 +103,9 @@
         <div class="bottom-content">
           <div class="socials">
             <a href="#"><i class="bx bxl-github icon-3d"></i></a>
-            <a href="#"><i class="bx bxl-discord icon-3d"></i></a>
-            <a href="#"> <i class="bx bxl-twitter icon-3d"></i></a>
-            <a href="#"> <i class="bx bxl-telegram icon-3d"></i></a>
+{#            <a href="#"><i class="bx bxl-discord icon-3d"></i></a>#}
+{#            <a href="#"> <i class="bx bxl-twitter icon-3d"></i></a>#}
+{#            <a href="#"> <i class="bx bxl-telegram icon-3d"></i></a>#}
           </div>
 
           {% block cart %}

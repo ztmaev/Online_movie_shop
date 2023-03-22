@@ -39,11 +39,12 @@
     <div class="item-list">
         {% for item in items %}
             <div class="item">
-                <a href="{{ url_for('item', item_id=item[0]) }}"><h2 class="headings">{{ item[1] }}</h2></a>
-                <img src="{{ item[3] }}" alt="{{ item[1] }} poster">
+                <a href="{{ url_for('item', item_id=item[0]) }}">
+                <img src="{{ item[3] }}" alt="{{ item[1] }} poster" class="index-poster">
                 <p id="description">{{ item[2] }}</p>
                 <p id="cast">Cast: {{ item[5] }}</p>
                 <p>Price: {{ item[6] }} Ksh</p>
+                </a>
                     {% if item[0] in purchased_items %}
                         <p class="owned">Owned</p>
                     {% elif item[0] in cart_items %}

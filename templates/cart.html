@@ -1,25 +1,41 @@
-{% extends "base.html" %}
-{% block head %}
-    <title>Cart</title>
-<style>
-  .cart-full li{
-    border: 2px solid purple;
-    border-radius: 5px;
-    margin: 5px auto;
-    padding: 10px;
-    width: fit-content;
-  }
-  .check-out{
-    margin: 0 auto;
-    width: fit-content;
-  }
-</style>
-{% endblock %}
+{% extends 'base.html' %}
+      {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+        <title>Cart</title>
+      {% endblock %}
 {% block content %}
+<div class="container-search">
+    <div>
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-store'></i>
+                <span class="text">
+                <h3>{{ item_count }}</h3>
+                <p>Movies in stock</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-box'></i>
+                <span class="text">
+                <h3>{{ owned }}</h3>
+                <p>Movies purchased</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
+                <h3> {% if not spend %} 0 {% else %}Ksh {{ spend }} {% endif %}</h3>
+                <p>Total Spent</p>
+            </span>
+            </li>
+        </ul>
+    </div>
+<div class="container-results">
+      <h2 class="head">Your Cart</h2>
+      <p class="separator"></p>
 
-  <h1>Your Cart</h1>
   {% if items %}
-<div class="cart-full">
+    <div class="cart-full">
     <ul style="list-style: none; ">
     {% for item in items %}
       {% set item_id = item[0] %}
@@ -34,6 +50,7 @@
           <button type="submit">Remove from Cart</button>
         </form>
       </li>
+        <p class="separator"></p>
     {% endfor %}
     </ul>
     <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
@@ -41,10 +58,11 @@
     </form>
     <br>
   {% else %}
-    <p>Your cart is empty.</p>
+    <p class="empty">Your cart is empty.</p>
   {% endif %}
 </div>
+</div>
+</div>
+
 {% endblock %}
-
-
 

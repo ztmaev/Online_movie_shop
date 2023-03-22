@@ -400,11 +400,6 @@ main .table-data .todo .todo-list li:last-child {
   	color: var(--text-color);
   }
   
-  #form-container label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
   #form-container input {
     width: 100%;
     padding: 5px;
@@ -439,7 +434,7 @@ main .table-data .todo .todo-list li:last-child {
   #form-container #close{
     position: absolute;
     top: 1%;
-    right: -2%;
+    right: -6%;
 	color: #ffff;
 	background-color: var(--dark-grey);
 	text-align: center;
@@ -499,3 +494,21 @@ main .table-data .todo .todo-list li:last-child {
 	background: var(--red);
 	cursor: pointer;
 }
+  .tmdb-search{
+	width: 100%;
+    position: absolute;
+	  right: 2%;
+  }
+  form.tmdb-search input, .tmdb-search label {
+    float: right;
+    padding: 5px;
+    margin: 5px;
+    margin-top: 45px;
+}
+  .tmdb-search input{
+    border-radius: 3px;
+	border: 2px solid var(--opposite-color);
+	  padding: 3px;
+	  text-align: center;
+	  font-size: 15px;
+  }

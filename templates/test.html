@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    img{
+      width:60px;
+    }
+    .cast{
+      display: inline-flex;
+      list-style: none;
+    }
+    .cast-card{
+      display: block;
+      margin: 10px;
+      padding: 10px;
+      align-content: center;
+      text-align: center;
+      border: 1px solid;
+      border-radius: 10px;
+    }
+    .cast-card img{
+      margin-top: 10px;
+    }
+  </style>
+    <title>Movie Details</title>
+  </head>
+  <body>
+    <h2>Search for a Movie</h2>
+    <form method="POST" action="/">
+      <label for="movie_id">Movie ID:</label>
+      <input type="text" id="movie_id" name="movie_id">
+      <button type="submit">Search</button>
+    </form>
+    {% if movie %}
+      <h1>{{ movie.name }}</h1>
+      <img src="{{ movie.poster }}" alt="{{ movie.name }} Poster">
+      <p>{{ movie.description }}</p>
+      <ul>
+        {% for category in movie.categories %}
+          <li>{{ category }}</li>
+        {% endfor %}
+      </ul>
+      <ul>
+        {% for tag in movie.tags %}
+          <li>{{ tag }}</li>
+        {% endfor %}
+      </ul>
+      <h2>Cast</h2>
+      <ul>
+        {% for cast_member in movie.cast %}
+          <li>
+            {% if cast_member.image %}
+              <img src="{{ cast_member.image }}" alt="{{ cast_member.name }} Image">
+            {% endif %}
+            {{ cast_member.name }}
+          </li>
+        {% endfor %}
+      </ul>
+      <h2>Trailer</h2>
+      <iframe width="560" height="315" src="{{ movie.trailer }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    {% endif %}
+
+  </body>
+</html>

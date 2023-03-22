@@ -1,38 +1,63 @@
-{% extends 'base.html' %}
-{% block head %}
-<title>Add Item</title>
+{% extends 'admin_stock.html' %}
+{% block title %}
+  <title> Adding New Item </title>
 {% endblock %}
-{% block content %}
-<h2>Add Item</h2>
-<form action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data">
-  <table>
-    <tr>
-      <td><label for="name">Name:</label></td>
-      <td><input type="text" id="name" name="moviename" required></td>
-    </tr>
-    <tr>
-      <td><label for="description">Description:</label></td>
-      <td><textarea id="description" name="description" required></textarea></td>
-    </tr>
-    <tr>
-      <td><label for="price">Price:</label></td>
-      <td><input type="number" id="price" name="price" step="0.01" min="0" required></td>
-    </tr>
-    <tr>
-      <td><label for="trailer">Trailer Link:</label></td>
-      <td><input type="text" id="trailer" name="trailer" required></td>
-    </tr>
-    <tr>
-      <td><label for="image">Image:</label></td>
-      <td><input type="text" id="image" name="image" accept="image/*" required></td>
-    </tr>
-    <tr>
-      <td><label for="cast">Cast:</label></td>
-      <td><textarea id="cast" name="cast" required></textarea></td>
-    </tr>
-  </table>
+{% block nav%}
+  <li><i class='bx bx-chevron-right' ></i></li>
+  <li>
+    <a class="active" href="{{ url_for('new_item') }}"> New</a>
+  </li>
+{% endblock %}
+{% block main %}
 
-  <input type="submit" value="Add Item">
-</form>
+    <form action="{{ url_for('new_item_tmdb')}}" method="post" class="tmdb-search">
+        <input type="submit" value="🔍" class="search">
+        <input type="text" id="tmdb" name="tmdb" required placeholder="TMDB Movie ID" class="input">
+    </form>
 
+{% if movie_details %}
+    <form action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data" class="edit-form">
+    <h1>Add Item</h1>
+    <div class="content">
+    <label for="name">Movie Name</label><br>
+        <input type="text" id="moviename" name="moviename" value="{{ movie_details.name }}"><br>
+    <label for="description">Description</label><br>
+        <input type="text" id="description" name="description" value="{{ movie_details.description }}"><br>
+    <label for="image">Poster</label><br>
+        <input type="text" id="image" name="image" value="{{ movie_details.poster }}"><br>
+    <label for="trailer">Trailer Link</label><br>
+        <input type="text" id="trailer" name="trailer" value="{{ movie_details.trailer }}"><br>
+    <label for="cast">Cast Names</label><br>
+        <input type="text" id="cast_names" name="cast" value="{% for actor in movie_details['cast'] %} {{ actor['name'] }} {% if not loop.last %}, {% endif %}{% endfor %}"><br>
+    <label for="price">Price</label><br>
+        <input type="text" id="price" name="price" value="{{ movie_details.tmdb }}"><br>
+        <input class="save" type="submit" value="Add Item">
+
+        <input type="hidden" id="tmdb" name="tmdb" value="{{ movie_details.tmdb }}">
+    </div>
+  </form>
+
+{% else %}
+
+    <form action="{{ url_for('new_item') }}" method="post" enctype="multipart/form-data" class="edit-form">
+    <h1>Add Item</h1>
+    <div class="content">
+    <label for="name">Movie Name</label><br>
+        <input type="text" id="moviename" name="moviename" value=""><br>
+    <label for="description">Description</label><br>
+        <input type="text" id="description" name="description" value=""><br>
+    <label for="image">Poster</label><br>
+        <input type="text" id="image" name="image" value=""><br>
+    <label for="trailer">Trailer Link</label><br>
+        <input type="text" id="trailer" name="trailer" value=""><br>
+    <label for="cast">Cast Names</label><br>
+        <input type="text" id="cast_names" name="cast" value=""><br>
+    <label for="price">Price</label><br>
+        <input type="text" id="price" name="price" value="0"><br>
+        <input class="save" type="submit" value="Add Item">
+    </div>
+  </form>
+
+
+{% endif %}
 {% endblock %}
