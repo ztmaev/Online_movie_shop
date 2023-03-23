@@ -434,7 +434,7 @@ main .table-data .todo .todo-list li:last-child {
   #form-container #close{
     position: absolute;
     top: 1%;
-    right: -6%;
+    right: -3%;
 	color: #ffff;
 	background-color: var(--dark-grey);
 	text-align: center;
@@ -497,13 +497,14 @@ main .table-data .todo .todo-list li:last-child {
   .tmdb-search{
 	width: 100%;
     position: absolute;
-	  right: 2%;
+    margin-top: 40px;
+    right: 3%;
   }
   form.tmdb-search input, .tmdb-search label {
     float: right;
     padding: 5px;
     margin: 5px;
-    margin-top: 45px;
+    margin-top: 5px;
 }
   .tmdb-search input{
     border-radius: 3px;

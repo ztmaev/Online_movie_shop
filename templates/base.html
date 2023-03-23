@@ -38,13 +38,19 @@
 
       <div class="menu-bar">
         <div class="menu">
+{% if 'username' in session %}
             <li class="search-box">
+
               <i class="bx bx-search icon"></i>
               <form id="search-form" action="{{ url_for('search') }}" method="get">
+
                 <input type="text" name="search_term" id="search-term" placeholder="Search...">
               </form>
             </li>
-
+    {% else %}
+                <li class="search-box" style="display: none">
+            </li>
+{% endif %}
             <script>
               const searchForm = document.getElementById('search-form');
               const searchInput = document.getElementById('search-term');
@@ -57,16 +63,17 @@
             </script>
 
           <ul class="menu-links">
-            <li class="nav-link">
+
+
+          {% if 'username' in session %}
+
+          {% if not session['admin'] %}
+              <li class="nav-link">
               <a href="{{ url_for('index') }}">
                 <i class="bx bx-home-alt icon"></i>
                 <span class="text nav-text">Home</span>
               </a>
             </li>
-
-          {% if 'username' in session %}
-
-          {% if not session['admin'] %}
 
             <li class="nav-link">
               <a href="{{ url_for('owned') }}">
@@ -145,6 +152,12 @@
           </form>
           </li>
     {% else %}
+          <li class="">
+            <a href="{{ url_for('signup') }}">
+              <i class="bx bx-edit icon"></i>
+              <span class="text nav-text">Signup</span>
+            </a>
+          </li>
           <li class="">
             <a href="{{ url_for('login') }}">
               <i class="bx bx-log-in icon"></i>
