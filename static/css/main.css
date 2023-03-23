@@ -594,3 +594,8 @@ iframe{
   margin-top: 18%;
   margin-bottom: 18%;
 }
+.item-scroll{
+  height: 530px;
+  overflow-y: scroll;
+  margin-bottom: -35px;
+}
