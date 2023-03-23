@@ -1,76 +1,86 @@
 <!-- login.html -->
 {% extends 'base.html' %}
 {% block head %}
-<title>Login</title>
-<style>
-  .alternate-body{
-    display: grid;
-    place-items: center;
-  }
-    .login{
-        display: grid;
-        place-items: center;
-        margin-top: 50px;
-      border: 2px solid var(--opposite-color);
-      border-radius: 5px;
-      padding: 20px 20px 40px 20px;
-      background-color: var(--body-color);
-      color: var(--opposite-color);
-      margin-top: 10%;
+    <title>Login</title>
+    <style>
+        .alternate-body {
+            display: grid;
+            place-items: center;
+        }
 
-    }
-    .login h1{
-        margin-bottom: 20px;
-    }
-    .login p{
-        margin-top: 30px;
-    }
-.login-card{
-  border: 2px solid var(--opposite-color);
-  border-radius: 5px;
-  width: fit-content;
-  padding: 20px;
-  text-align: right;
-align-items: center;
-}
-.login button{
-  padding: 5px;
-  border-radius: 10px;
-}
-.popup{
-  position: absolute;
-    top: 0;
-    align-items: center;
-    text-align: center;
-  background: #ccc;
-  border: 2px solid;
-  border-radius: 5px;
-  padding: 5px;
-}
-</style>
+        .login {
+            display: grid;
+            place-items: center;
+            margin-top: 50px;
+            border: 2px solid var(--opposite-color);
+            border-radius: 5px;
+            padding: 20px 20px 40px 20px;
+            background-color: var(--body-color);
+            color: var(--opposite-color);
+            margin-top: 10%;
+
+        }
+
+        .login h1 {
+            margin-bottom: 20px;
+        }
+
+        .login p {
+            margin-top: 30px;
+        }
+
+        .login-card {
+            border: 2px solid var(--opposite-color);
+            border-radius: 5px;
+            width: fit-content;
+            padding: 20px;
+            text-align: right;
+            align-items: center;
+        }
+
+        .login button {
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .popup {
+            position: absolute;
+            top: 0;
+            align-items: center;
+            text-align: center;
+            background: #ccc;
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
 {% endblock %}
 
 
 {% block content %}
-  {% if error %}
-    <p class="popup" style="color: red;">{{ error }}</p>
-  {% endif %}
-<div class="login">
-  <h1>Login</h1>
-<div class="login-card">
-  <form method="POST" action="{{ url_for('login') }}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
+    {% if error %}
+        <p class="popup" style="color: red;">{{ error }}</p>
+    {% endif %}
+    <div class="login">
+        <h1>Login</h1>
+        <div class="login-card">
+            <form method="POST" action="{{ url_for('login') }}">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
 
-    <button type="submit">Login</button>
-  </form>
+                <button type="submit">Login</button>
+            </form>
 
-  </div>
-  <p>Don't have an account? <a href="{{ url_for('signup') }}"> <button>Sign up</button></a></p>
-  <p>Forgot your password? <a href="{{ url_for('change_password') }}"> <button>Change Password</button></a></p>
-</div>
+        </div>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">
+            <button>Sign up</button>
+        </a></p>
+        <p>Forgot your password? <a href="{{ url_for('change_password') }}">
+            <button>Change Password</button>
+        </a></p>
+    </div>
 
 {% endblock %}

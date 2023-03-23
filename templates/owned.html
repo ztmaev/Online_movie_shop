@@ -1,30 +1,30 @@
 {% extends 'base.html' %}
 {% block head %}
 
-<title>Inventory</title>
+    <title>Inventory</title>
 
 {% endblock %}
 
 {% block content %}
 
-<h1>Owned Items</h1>
-<table>
-  <tr>
-    <th>Item ID</th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>Total Price</th>
-    <th>Date</th>
-  </tr>
-  {% for item in items %}
-  <tr>
-    <td>{{ item[1] }}</td>
-    <td>{{ item[2] }}</td>
-    <td>{{ item[3] }}</td>
-    <td>{{ item[4] }}</td>
-    <td>{{ item[5] }}</td>
-  </tr>
-  {% endfor %}
-</table>
+    <h1>Owned Items</h1>
+    <table>
+        <tr>
+            <th>Item ID</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            <th>Date</th>
+        </tr>
+        {% for item in items %}
+            <tr>
+                <td>{{ item[1] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[3] }}</td>
+                <td>{{ item[4] }}</td>
+                <td>{{ item[5] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

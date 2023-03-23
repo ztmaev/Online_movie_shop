@@ -1,137 +1,137 @@
 {% extends 'base.html' %}
-    {% block head %}
+{% block head %}
     {% block title %}
-    <title>Stock Dashboard</title>
+        <title>Stock Dashboard</title>
     {% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-    {% endblock %}
+{% endblock %}
 {% block content %}
-<main>
-    <div class="head-title">
-        <div class="left">
-            <h1>Dashboard</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right' ></i></li>
-                <li>
-                    <a class="active" href="{{ url_for('admin_stock') }}">Stock</a>
-                </li>
-                {% block nav%}
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Dashboard</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="{{ url_for('admin_stock') }}">Stock</a>
+                    </li>
+                    {% block nav %}
 
-                {% endblock %}
-            </ul>
+                    {% endblock %}
+                </ul>
+            </div>
+            <a href="#" class="btn-download">
+                <i class='bx bxs-crown'></i>
+                <span class="text">Admin</span>
+            </a>
         </div>
-        <a href="#" class="btn-download">
-            <i class='bx bxs-crown' ></i>
-            <span class="text">Admin</span>
-        </a>
-    </div>
 
-    <ul class="box-info">
-        <li>
-            <i class='bx bxs-calendar-check' ></i>
-            <span class="text">
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-calendar-check'></i>
+                <span class="text">
                 <h3>{{ item_count }}</h3>
                 <p>Movies in stock</p>
             </span>
-        </li>
-        <li>
-            <i class='bx bxs-group' ></i>
-            <span class="text">
+            </li>
+            <li>
+                <i class='bx bxs-group'></i>
+                <span class="text">
                 <h3>{{ user_count }}</h3>
                 <p>Total users</p>
             </span>
-        </li>
-        <li>
-            <i class='bx bxs-dollar-circle' ></i>
-            <span class="text">
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
                 <h3>Ksh {{ purchase_count }}</h3>
                 <p>Total Sales</p>
             </span>
-        </li>
-    </ul>
-    {% block main %}
+            </li>
+        </ul>
+        {% block main %}
 
-    <div class="table-data">
-        <div class="order">
-            <div class="head">
-                <h3>Stock Items</h3>
-                <button id="open-form-btn">Add New Item</button>
-                <div id="form-overlay">
-                    <div id="form-container">
-                        <h2>Add Item</h2> 
-                        <button id="close" type="button">X</button>
-                            <form action="{{ url_for('new_item_tmdb')}}" method="post" class="tmdb-search">
-                                <input type="text" id="tmdb" name="tmdb" required placeholder="TMDB Movie ID">
-                                <input type="submit" value="🔍">
-                            </form>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Stock Items</h3>
+                        <button id="open-form-btn">Add New Item</button>
+                        <div id="form-overlay">
+                            <div id="form-container">
+                                <h2>Add Item</h2>
+                                <button id="close" type="button">X</button>
+                                <form action="{{ url_for('new_item_tmdb') }}" method="post" class="tmdb-search">
+                                    <input type="text" id="tmdb" name="tmdb" required placeholder="TMDB Movie ID">
+                                    <input type="submit" value="🔍">
+                                </form>
+                            </div>
+                        </div>
+                        <div id="form-overlay">
+                            <div id="form-container">
+                                <h2>Edit Item</h2>
+
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                <div id="form-overlay">
-                    <div id="form-container">
-                        <h2>Edit Item</h2> 
-                          
-                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Trailer</th>
+                            <th>Image</th>
+                            <th>Cast</th>
+                            <th>Price</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.item_id }}</td>
+                                <td>{{ item.moviename }}</td>
+                                <td>{{ item.description }}</td>
+                                <td><a href="{{ item.trailer_link }}">▶️</a></td>
+                                <td><img src="{{ item.poster }} " alt=""></td>
+                                <td>{{ item.cast_names }}</td>
+                                <td>{{ item.price }}</td>
+                                <td>
+                                    <form action="{{ url_for('item_edit', item_id=item[0]) }}" method="get">
+                                        <input class="update" type="submit" value="Edit">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{{ url_for('item_delete', item_id=item[0]) }}" method="post">
+                                        <input class="delete" type="submit" value="Delete">
+                                    </form>
+                                </td>
+
+                            <tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Trailer</th>
-                        <th>Image</th>
-                        <th>Cast</th>
-                        <th>Price</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items %}
-                        <tr>
-                            <td>{{ item.item_id }}</td>
-                            <td>{{ item.moviename }}</td>
-                            <td>{{ item.description }}</td>
-                            <td><a href="{{ item.trailer_link }}">▶️</a></td>
-                            <td><img src="{{ item.poster }} " alt=""></td>
-                            <td>{{ item.cast_names }}</td>
-                            <td>{{ item.price }}</td>
-                            <td>
-                                <form action="{{ url_for('item_edit', item_id=item[0]) }}" method="get">
-                                  <input class="update" type="submit" value="Edit">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="{{ url_for('item_delete', item_id=item[0]) }}" method="post">
-                                  <input class="delete" type="submit" value="Delete">
-                                </form>
-                            </td>
+        {% endblock %}
+    </main>
+    <script>
+        const openFormBtn = document.getElementById('open-form-btn');
+        const closeFormBtn = document.getElementById('close');
+        const formOverlay = document.getElementById('form-overlay');
 
-                        <tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>     
+        openFormBtn.addEventListener('click', () => {
+            formOverlay.style.display = 'block';
+        });
 
-    </div>
-    {% endblock %}
-</main>
-<script>
-const openFormBtn = document.getElementById('open-form-btn');
-const closeFormBtn = document.getElementById('close');
-const formOverlay = document.getElementById('form-overlay');
+        closeFormBtn.addEventListener('click', () => {
+            formOverlay.style.display = 'none';
+        });
 
-openFormBtn.addEventListener('click', () => {
-  formOverlay.style.display = 'block';
-});
-
-closeFormBtn.addEventListener('click', () => {
-  formOverlay.style.display = 'none';
-});
-
-</script>
+    </script>
 {% endblock %}

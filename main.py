@@ -1,7 +1,8 @@
 import datetime
-import sqlite3
-import requests
 import json
+import sqlite3
+
+import requests
 from flask import Flask, g, request, session, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
 API_KEY = "d96c51d9aa944073eb95ae3cdccb11af"
+
 
 def get_db():
     if 'db' not in g:
@@ -129,7 +131,8 @@ def search():
 
     conn.close()
 
-    return render_template('search.html', movies=movies, search_term=search_term, item_count=item_count, owned=owned, spend=spend, purchased_items=purchased_items, cart_items=cart_items)
+    return render_template('search.html', movies=movies, search_term=search_term, item_count=item_count, owned=owned,
+                           spend=spend, purchased_items=purchased_items, cart_items=cart_items)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -403,7 +406,6 @@ def admin_stock():
         purchase_count = total_purchases[0]
         conn.close()
 
-
         return render_template('admin_stock.html', items=items, item_count=item_count, user_count=user_count,
                                purchase_count=purchase_count)
     else:
@@ -449,9 +451,11 @@ def new_item():
         purchase_count = total_purchases[0]
         conn.close()
 
-        return render_template('new_item.html',item_count=item_count, user_count=user_count,purchase_count=purchase_count)
+        return render_template('new_item.html', item_count=item_count, user_count=user_count,
+                               purchase_count=purchase_count)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/admin/tmdb', methods=['GET', 'POST'])
 def new_item_tmdb():
@@ -523,10 +527,10 @@ def new_item_tmdb():
         total_purchases = cursor.fetchone()
         purchase_count = total_purchases[0]
         conn.close()
-        return render_template("new_item.html", movie_details=movie_details, item_count=item_count, user_count=user_count, purchase_count=purchase_count)
+        return render_template("new_item.html", movie_details=movie_details, item_count=item_count,
+                               user_count=user_count, purchase_count=purchase_count)
     else:
         return redirect(url_for('login'))
-
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -591,7 +595,8 @@ def cart():
         spend = total_items[0]
 
         conn.close()
-        return render_template('cart.html', items=items, total=total, item_id=item_id, item_count=item_count, owned=owned, spend=spend)
+        return render_template('cart.html', items=items, total=total, item_id=item_id, item_count=item_count,
+                               owned=owned, spend=spend)
     else:
         return redirect(url_for('login'))
 
@@ -719,7 +724,6 @@ def item_edit(item_id):
                 (moviename, description, cast_names, price, poster, trailer_link, item_id))
             conn.commit()
             flash('Item updated successfully.')
-
 
             # Redirect to the stock list page
             return redirect(url_for('admin_stock'))

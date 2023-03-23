@@ -2,49 +2,49 @@
 
 {% block head %}
     <title>Home</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="banner">
+    <div class="banner">
         <a href="{{ url_for('item', item_id=banner[0]) }}"><h2 class="banner-heading">{{ banner[1] }}</h2></a>
-                <img src="{{ banner[3] }}" alt="{{ banner[1] }} poster">
-            <div id="banner-group">
-                <p id="banner-description">{{ banner[2] }}</p>
-                <p id="banner-cast"><strong>Cast</strong>:  {{ banner[5] }}</p>
-                <p class="banner-price"><strong>Price</strong>:  {{ banner[6] }} Ksh</p>
-                    {% if banner[0] in purchased_items %}
-                        <p class="banner-owned">Owned</p>
-                    {% elif banner[0] in cart_items %}
-                        <p class="banner-owned">In Cart</p>
-                    {% else %}
+        <img src="{{ banner[3] }}" alt="{{ banner[1] }} poster">
+        <div id="banner-group">
+            <p id="banner-description">{{ banner[2] }}</p>
+            <p id="banner-cast"><strong>Cast</strong>: {{ banner[5] }}</p>
+            <p class="banner-price"><strong>Price</strong>: {{ banner[6] }} Ksh</p>
+            {% if banner[0] in purchased_items %}
+                <p class="banner-owned">Owned</p>
+            {% elif banner[0] in cart_items %}
+                <p class="banner-owned">In Cart</p>
+            {% else %}
 
-                        <form action="{{ url_for('add_to_cart') }}" method="POST">
-                            <input type="hidden" name="item_id" value="{{ banner[0] }}">
-                            <button type="submit">Add to Cart</button>
-                        </form>
+                <form action="{{ url_for('add_to_cart') }}" method="POST">
+                    <input type="hidden" name="item_id" value="{{ banner[0] }}">
+                    <button type="submit">Add to Cart</button>
+                </form>
 
-                    {% endif %}
+            {% endif %}
 
-            </div>
+        </div>
 
-</div>
-<div class="movie-list">
-    {% if session['admin'] %}
-        <p>You are an admin.</p>
-        <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
-    {% endif %}
-    <br>
+    </div>
+    <div class="movie-list">
+        {% if session['admin'] %}
+            <p>You are an admin.</p>
+            <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+        {% endif %}
+        <br>
 
-    <div class="item-list">
-        {% for item in items %}
-            <div class="item">
-                <a href="{{ url_for('item', item_id=item[0]) }}">
-                <img src="{{ item[3] }}" alt="{{ item[1] }} poster" class="index-poster">
-                <p id="description">{{ item[2] }}</p>
-                <p id="cast">Cast: {{ item[5] }}</p>
-                <p>Price: {{ item[6] }} Ksh</p>
-                </a>
+        <div class="item-list">
+            {% for item in items %}
+                <div class="item">
+                    <a href="{{ url_for('item', item_id=item[0]) }}">
+                        <img src="{{ item[3] }}" alt="{{ item[1] }} poster" class="index-poster">
+                        <p id="description">{{ item[2] }}</p>
+                        <p id="cast">Cast: {{ item[5] }}</p>
+                        <p>Price: {{ item[6] }} Ksh</p>
+                    </a>
                     {% if item[0] in purchased_items %}
                         <p class="owned">Owned</p>
                     {% elif item[0] in cart_items %}
@@ -58,9 +58,9 @@
 
                     {% endif %}
 
-            </div>
+                </div>
 
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}

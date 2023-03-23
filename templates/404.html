@@ -9,7 +9,7 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-        body{
+        body {
             background-color: #191919;
             text-align: center;
             display: grid;
@@ -22,11 +22,13 @@
             position: center;
             margin-top: 15%;
         }
-        .not-found{
+
+        .not-found {
             font-size: 30px;
             position: center;
         }
-        .link button{
+
+        .link button {
             padding: 5px 10px 5px 10px;
             color: #191919;
             font-size: 20px;
@@ -34,7 +36,8 @@
             border: transparent;
             border-radius: 20px;
         }
-        .link button:hover{
+
+        .link button:hover {
             background-color: #626262;
             color: #ffffff;
         }
@@ -43,6 +46,8 @@
 <body>
 <h1 class="404">404</h1>
 <p class="not-found">page not found</p>
-<a class="link" href="{{ url_for('index') }}"> <button>Homepage</button></a>
+<a class="link" href="{{ url_for('index') }}">
+    <button>Homepage</button>
+</a>
 </body>
 </html>

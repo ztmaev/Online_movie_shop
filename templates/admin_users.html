@@ -1,69 +1,69 @@
 {% extends 'base.html' %}
-    {% block head %}
-        <title>User Dashboard</title>
+{% block head %}
+    <title>User Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-    {% endblock %}
+{% endblock %}
 {% block content %}
-<main>
-    <div class="head-title">
-        <div class="left">
-            <h1>Dashboard</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right' ></i></li>
-                <li>
-                    <a class="active" href="{{ url_for('admin_users') }}">Users</a>
-                </li>
-            </ul>
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Dashboard</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="{{ url_for('admin_users') }}">Users</a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#" class="btn-download">
+                <i class='bx bxs-crown'></i>
+                <span class="text">Admin</span>
+            </a>
         </div>
-        <a href="#" class="btn-download">
-            <i class='bx bxs-crown' ></i>
-            <span class="text">Admin</span>
-        </a>
-    </div>
 
-    <ul class="box-info">
-        <li>
-            <i class='bx bxs-calendar-check' ></i>
-            <span class="text">
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-calendar-check'></i>
+                <span class="text">
                 <h3>{{ item_count }}</h3>
                 <p>Movies in stock</p>
             </span>
-        </li>
-        <li>
-            <i class='bx bxs-group' ></i>
-            <span class="text">
+            </li>
+            <li>
+                <i class='bx bxs-group'></i>
+                <span class="text">
                 <h3>{{ user_count }}</h3>
                 <p>Total users</p>
             </span>
-        </li>
-        <li>
-            <i class='bx bxs-dollar-circle' ></i>
-            <span class="text">
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
                 <h3>Ksh {{ user_count }}</h3>
                 <p>Total Sales</p>
             </span>
-        </li>
-    </ul>
+            </li>
+        </ul>
 
 
-    <div class="table-data">
-        <div class="order">
-            <div class="head">
-                <h3>Users</h3>
-            </div>
-            <table>
-                <thead>
+        <div class="table-data">
+            <div class="order">
+                <div class="head">
+                    <h3>Users</h3>
+                </div>
+                <table>
+                    <thead>
                     <tr>
                         <th>Username</th>
                         <th>Admin</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for user in users %}
                         <tr>
                             <td>
@@ -73,37 +73,40 @@
                             <td>{{ 'Yes' if user[1] else 'No' }}</td>
                             <td>
                                 <form action="{{ url_for('admin_users') }}" method="post">
-                                  <input type="hidden" name="username" value="{{ user[0] }}">
-                                  <label class="container">
-                                  <input class="checkbox" id="is_admin" type="checkbox" name="is_admin" {% if user[1] %}checked{% endif %}>
-                                    <span class="checkmark"></span>
-                                  </label>
-                                  <input class="update" type="submit" name="edit-user" value="Update">
+                                    <input type="hidden" name="username" value="{{ user[0] }}">
+                                    <label class="container">
+                                        <input class="checkbox" id="is_admin" type="checkbox" name="is_admin"
+                                               {% if user[1] %}checked{% endif %}>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <input class="update" type="submit" name="edit-user" value="Update">
                                 </form>
-                              </td>
+                            </td>
                             <td>
                                 <form action="{{ url_for('admin_users') }}" method="post">
-                                  <input type="hidden" name="username" value="{{ user[0] }}">
-                                  <input class="delete" type="submit" name="delete-user" value="Delete">
+                                    <input type="hidden" name="username" value="{{ user[0] }}">
+                                    <input class="delete" type="submit" name="delete-user" value="Delete">
                                 </form>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="todo usertd">
-            <div class="head">
-                <h3>Top users</h3>
+                    </tbody>
+                </table>
             </div>
-            <ul class="todo-list" >
-                {% for user in top_users %}
-                 <li class="completed">
-                     <p>{{ user[0] }}</p><p class="amount">Ksh {{ user[1] }}</p><p class="">{{ user[2] }} Purchases</p>
-                 </li>
-                {% endfor %}
-            </ul>
+            <div class="todo usertd">
+                <div class="head">
+                    <h3>Top users</h3>
+                </div>
+                <ul class="todo-list">
+                    {% for user in top_users %}
+                        <li class="completed">
+                            <p>{{ user[0] }}</p>
+                            <p class="amount">Ksh {{ user[1] }}</p>
+                            <p class="">{{ user[2] }} Purchases</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
 {% endblock %}

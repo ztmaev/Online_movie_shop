@@ -1,27 +1,31 @@
 {% extends "base.html" %}
 {% block head %}
-<title>Checkout</title>
+    <title>Checkout</title>
 {% endblock %}
 {% block content %}
     <div>
-<a href="{{ url_for('index') }}"> <button>Homepage</button></a>
-<a href="{{ url_for('cart')}}"><button>Cart</button></a>
-  <h1>Items</h1>
-  {% if items %}
-    <ul style="list-style:-moz-ethiopic-numeric;">
-      {% for item in items %}
-        <li> {{ item[1] }} - {{ item[2] }} Ksh</li>
-      {% endfor %}
-    </ul>
+        <a href="{{ url_for('index') }}">
+            <button>Homepage</button>
+        </a>
+        <a href="{{ url_for('cart') }}">
+            <button>Cart</button>
+        </a>
+        <h1>Items</h1>
+        {% if items %}
+            <ul style="list-style:-moz-ethiopic-numeric;">
+                {% for item in items %}
+                    <li> {{ item[1] }} - {{ item[2] }} Ksh</li>
+                {% endfor %}
+            </ul>
 
-  <h1>Checkout</h1>
-  <p>Total price: {{ total }} Ksh</p>
-  <form method="POST" action="{{ url_for('complete_checkout') }}">
-    <button type="submit">Confirm Purchase</button>
-  </form>
-  <br>
-  {% else %}
-    <p>No items in cart.</p>
-  {% endif %}
+            <h1>Checkout</h1>
+            <p>Total price: {{ total }} Ksh</p>
+            <form method="POST" action="{{ url_for('complete_checkout') }}">
+                <button type="submit">Confirm Purchase</button>
+            </form>
+            <br>
+        {% else %}
+            <p>No items in cart.</p>
+        {% endif %}
     </div>
 {% endblock %}

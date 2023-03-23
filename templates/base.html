@@ -1,261 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
 
-
     <link
-      href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
-      rel="stylesheet"
+            href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
+            rel="stylesheet"
     />
 
 
-      {% block head %}
+    {% block head %}
 
-      {% endblock %}
-  </head>
-  <body>
-    <nav class="sidebar close">
-      <header>
+    {% endblock %}
+</head>
+<body>
+<nav class="sidebar close">
+    <header>
         <div class="image-text">
           <span class="image">
-            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="" /></a>
+            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt=""/></a>
           </span>
 
-          <div class="text logo-text">
-            <span class="name"> MaevHub </span>
-            <span class="profession"> _< </span>
-          </div>
+            <div class="text logo-text">
+                <span class="name"> MaevHub </span>
+                <span class="profession"> _< </span>
+            </div>
         </div>
 
         <i class="bx bx-chevron-right toggle"></i>
-      </header>
+    </header>
 
-      <div class="menu-bar">
+    <div class="menu-bar">
         <div class="menu">
-{% if 'username' in session %}
-            <li class="search-box">
+            {% if 'username' in session %}
+                <li class="search-box">
 
-              <i class="bx bx-search icon"></i>
-              <form id="search-form" action="{{ url_for('search') }}" method="get">
+                    <i class="bx bx-search icon"></i>
+                    <form id="search-form" action="{{ url_for('search') }}" method="get">
 
-                <input type="text" name="search_term" id="search-term" placeholder="Search...">
-              </form>
-            </li>
-    {% else %}
+                        <input type="text" name="search_term" id="search-term" placeholder="Search...">
+                    </form>
+                </li>
+            {% else %}
                 <li class="search-box" style="display: none">
-            </li>
-{% endif %}
+                </li>
+            {% endif %}
             <script>
-              const searchForm = document.getElementById('search-form');
-              const searchInput = document.getElementById('search-term');
-              searchInput.addEventListener('keydown', function(event) {
-                if (event.keyCode === 13) { // Enter key
-                  event.preventDefault();
-                  searchForm.submit();
-                }
-              });
+                const searchForm = document.getElementById('search-form');
+                const searchInput = document.getElementById('search-term');
+                searchInput.addEventListener('keydown', function (event) {
+                    if (event.keyCode === 13) { // Enter key
+                        event.preventDefault();
+                        searchForm.submit();
+                    }
+                });
             </script>
 
-          <ul class="menu-links">
+            <ul class="menu-links">
 
 
-          {% if 'username' in session %}
+                {% if 'username' in session %}
 
-          {% if not session['admin'] %}
-              <li class="nav-link">
-              <a href="{{ url_for('index') }}">
-                <i class="bx bx-home-alt icon"></i>
-                <span class="text nav-text">Home</span>
-              </a>
-            </li>
+                    {% if not session['admin'] %}
+                        <li class="nav-link">
+                            <a href="{{ url_for('index') }}">
+                                <i class="bx bx-home-alt icon"></i>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
 
-            <li class="nav-link">
-              <a href="{{ url_for('owned') }}">
-                <i class="bx bx-movie icon"></i>
-                <span class="text nav-text">Owned</span>
-              </a>
-            </li>
-            {% endif %}
-              {% if session['admin'] %}
-                  <li class="nav-link">
-                      <a href="{{ url_for('admin_users') }}">
-                        <i class="bx bx-user icon"></i>
-                        <span class="text nav-text">Users</span>
-                      </a>
-                  </li>
-                  <li class="nav-link">
-                      <a href="{{ url_for('admin_stock') }}">
-                        <i class="bx bx-folder icon"></i>
-                        <span class="text nav-text">Stock</span>
-                      </a>
-                  </li>
-                  <li class="nav-link">
-                      <a href="{{ url_for('new_item') }}">
-                        <i class="bx bx-server icon"></i>
-                        <span class="text nav-text">Add Item</span>
-                      </a>
-                  </li>
-                  {% endif %}
-            {% endif %}
+                        <li class="nav-link">
+                            <a href="{{ url_for('owned') }}">
+                                <i class="bx bx-movie icon"></i>
+                                <span class="text nav-text">Owned</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if session['admin'] %}
+                        <li class="nav-link">
+                            <a href="{{ url_for('admin_users') }}">
+                                <i class="bx bx-user icon"></i>
+                                <span class="text nav-text">Users</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="{{ url_for('admin_stock') }}">
+                                <i class="bx bx-folder icon"></i>
+                                <span class="text nav-text">Stock</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="{{ url_for('new_item') }}">
+                                <i class="bx bx-server icon"></i>
+                                <span class="text nav-text">Add Item</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
 
-          </ul>
+            </ul>
         </div>
 
         <div class="bottom-content">
-          <div class="socials">
-            <a href="#"><i class="bx bxl-github icon-3d"></i></a>
-{#            <a href="#"><i class="bx bxl-discord icon-3d"></i></a>#}
-{#            <a href="#"> <i class="bx bxl-twitter icon-3d"></i></a>#}
-{#            <a href="#"> <i class="bx bxl-telegram icon-3d"></i></a>#}
-          </div>
-
-          {% block cart %}
-          {% if 'username' in session %}
-          {% if session['admin'] %}
-
-          {% else %}
-
-              <p class="items">{{ cart_count() }}</p>
-              <li class="cart">
-                <a href="{{ url_for('cart') }}">
-                  <i class="bx bx-cart icon"></i>
-                  <span class="text nav-text">Cart</span>
-                </a>
-              </li>
-              <li class="history">
-                <a href="{{ url_for('history') }}">
-                  <i class="bx bx-history icon"></i>
-                  <span class="text nav-text">Purchases </span>
-                </a>
-              </li>
-          {% endif %}
-          {% else %}
-
-          {% endif %}
-          {% endblock %}
-
-{% block account %}
-    {% if 'username' in session %}
-          <li class="">
-          <a href="{{ url_for('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="bx bx-log-out icon"></i>
-            <span class="text nav-text">Logout [{{ session['username'] }}]</span>
-          </a>
-          <form id="logout-form" action="{{ url_for('logout') }}" method="post">
-            <input type="submit" value="Logout" style="display: none;">
-          </form>
-          </li>
-    {% else %}
-          <li class="">
-            <a href="{{ url_for('signup') }}">
-              <i class="bx bx-edit icon"></i>
-              <span class="text nav-text">Signup</span>
-            </a>
-          </li>
-          <li class="">
-            <a href="{{ url_for('login') }}">
-              <i class="bx bx-log-in icon"></i>
-              <span class="text nav-text">Login</span>
-            </a>
-          </li>
-
-    {% endif %}
-{% endblock %}
-
-
-          <li class="mode">
-            <div class="sun-moon">
-              <i class="bx bx-moon icon moon"></i>
-              <i class="bx bx-sun icon sun"></i>
+            <div class="socials">
+                <a href="#"><i class="bx bxl-github icon-3d"></i></a>
+                {#            <a href="#"><i class="bx bxl-discord icon-3d"></i></a>#}
+                {#            <a href="#"> <i class="bx bxl-twitter icon-3d"></i></a>#}
+                {#            <a href="#"> <i class="bx bxl-telegram icon-3d"></i></a>#}
             </div>
-            <span class="mode-text text">Dark mode</span>
 
-            <div class="toggle-switch">
-              <span class="switch"></span>
-            </div>
-          </li>
+            {% block cart %}
+                {% if 'username' in session %}
+                    {% if session['admin'] %}
+
+                    {% else %}
+
+                        <p class="items">{{ cart_count() }}</p>
+                        <li class="cart">
+                            <a href="{{ url_for('cart') }}">
+                                <i class="bx bx-cart icon"></i>
+                                <span class="text nav-text">Cart</span>
+                            </a>
+                        </li>
+                        <li class="history">
+                            <a href="{{ url_for('history') }}">
+                                <i class="bx bx-history icon"></i>
+                                <span class="text nav-text">Purchases </span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% else %}
+
+                {% endif %}
+            {% endblock %}
+
+            {% block account %}
+                {% if 'username' in session %}
+                    <li class="">
+                        <a href="{{ url_for('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="bx bx-log-out icon"></i>
+                            <span class="text nav-text">Logout [{{ session['username'] }}]</span>
+                        </a>
+                        <form id="logout-form" action="{{ url_for('logout') }}" method="post">
+                            <input type="submit" value="Logout" style="display: none;">
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="">
+                        <a href="{{ url_for('signup') }}">
+                            <i class="bx bx-edit icon"></i>
+                            <span class="text nav-text">Signup</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="{{ url_for('login') }}">
+                            <i class="bx bx-log-in icon"></i>
+                            <span class="text nav-text">Login</span>
+                        </a>
+                    </li>
+
+                {% endif %}
+            {% endblock %}
+
+
+            <li class="mode">
+                <div class="sun-moon">
+                    <i class="bx bx-moon icon moon"></i>
+                    <i class="bx bx-sun icon sun"></i>
+                </div>
+                <span class="mode-text text">Dark mode</span>
+
+                <div class="toggle-switch">
+                    <span class="switch"></span>
+                </div>
+            </li>
         </div>
-      </div>
-    </nav>
-    <section class="home">
-      <!--hover content-->
-
-    </section>
-    <div class="alternate-body">
-      <!----------------Main content----------->
-      <div class="bg"></div>
-        {% block messages %}
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="flashes">
-        {% for message in messages %}
-          <p style="color: red">{{ message }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
-{% endblock %}
-
-{% block content %}
-
-{% endblock %}
-
     </div>
-    <script src="sidebar.js"></script>
-  <script>
-  const body = document.querySelector("body"),
-  sidebar = body.querySelector("nav"),
-  toggle = body.querySelector(".toggle"),
-  searchBtn = body.querySelector(".search-box"),
-  modeSwitch = body.querySelector(".toggle-switch"),
-  modeText = body.querySelector(".mode-text");
-  alternateBody = document.querySelector(".alternate-body");
+</nav>
+<section class="home">
+    <!--hover content-->
 
-// Event listener for toggle button
-toggle.addEventListener("click", () => {
-  sidebar.classList.toggle("close");
-});
+</section>
+<div class="alternate-body">
+    <!----------------Main content----------->
+    <div class="bg"></div>
+    {% block messages %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for message in messages %}
+                        <p style="color: red">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    {% endblock %}
 
-alternateBody.addEventListener("click", () => {
-  sidebar.classList.add("close");
-});
+    {% block content %}
 
-searchBtn.addEventListener("click", () => {
-  sidebar.classList.remove("close");
-});
+    {% endblock %}
 
-// Load user's theme preference from local storage
-const storedTheme = localStorage.getItem("theme");
-if (storedTheme) {
-  body.classList.add(storedTheme);
-  if (storedTheme === "dark") {
-    modeText.innerText = "Light mode";
-  } else {
-    modeText.innerText = "Dark mode";
-  }
-}
+</div>
+<script src="sidebar.js"></script>
+<script>
+    const body = document.querySelector("body"),
+        sidebar = body.querySelector("nav"),
+        toggle = body.querySelector(".toggle"),
+        searchBtn = body.querySelector(".search-box"),
+        modeSwitch = body.querySelector(".toggle-switch"),
+        modeText = body.querySelector(".mode-text");
+    alternateBody = document.querySelector(".alternate-body");
 
-// Event listener for mode switch
-modeSwitch.addEventListener("click", () => {
-  body.classList.toggle("dark");
+    // Event listener for toggle button
+    toggle.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+    });
 
-  // Save user's theme preference to local storage
-  localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+    alternateBody.addEventListener("click", () => {
+        sidebar.classList.add("close");
+    });
 
-  if (body.classList.contains("dark")) {
-    modeText.innerText = "Light mode";
-  } else {
-    modeText.innerText = "Dark mode";
-  }
-});
+    searchBtn.addEventListener("click", () => {
+        sidebar.classList.remove("close");
+    });
+
+    // Load user's theme preference from local storage
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme) {
+        body.classList.add(storedTheme);
+        if (storedTheme === "dark") {
+            modeText.innerText = "Light mode";
+        } else {
+            modeText.innerText = "Dark mode";
+        }
+    }
+
+    // Event listener for mode switch
+    modeSwitch.addEventListener("click", () => {
+        body.classList.toggle("dark");
+
+        // Save user's theme preference to local storage
+        localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+
+        if (body.classList.contains("dark")) {
+            modeText.innerText = "Light mode";
+        } else {
+            modeText.innerText = "Dark mode";
+        }
+    });
 
 
-    </script>
-  </body>
+</script>
+</body>
 </html>

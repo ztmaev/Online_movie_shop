@@ -1,4 +1,4 @@
-.banner{
+.banner {
     width: 99%;
     height: 45vh;
     background: var(--body-color2);
@@ -8,7 +8,8 @@
     padding-right: -5px;
     border-radius: 8px;
 }
-.banner img{
+
+.banner img {
     float: left;
     position: relative;
     width: auto;
@@ -17,7 +18,8 @@
     border-radius: 10px;
     padding: 6px;
 }
-.banner-heading{
+
+.banner-heading {
     color: var(--text-color);
     position: absolute;
     right: 7%;
@@ -25,16 +27,20 @@
     top: 5%;
     font-size: 30px;
 }
-#banner-cast{
+
+#banner-cast {
     margin-top: 20px;
 }
-.banner-price{
+
+.banner-price {
     margin-top: 20px;
 }
-.banner form{
+
+.banner form {
     margin-top: 20px;
     float: right;
 }
+
 .banner button {
     color: var(--body-color2);
     background: var(--text-color);
@@ -46,6 +52,7 @@
     right: 2%;
     bottom: 1%;
 }
+
 #banner-group {
     position: absolute;
     width: 42%;
@@ -53,11 +60,13 @@
     right: 30px;
     text-align: left;
 }
-.movie-list{
+
+.movie-list {
     margin-top: -5px;
     margin-left: -5px;
 }
-.owned, .in-cart{
+
+.owned, .in-cart {
     width: 100%;
     color: white;
     background: green;
@@ -67,15 +76,18 @@
     border: 2px solid var(--text-color);
     border-radius: 5px;
 }
-.in-cart{
+
+.in-cart {
     background: orange;
 }
-.item h2{
+
+.item h2 {
     height: 65px;
     align-items: center;
     text-align: center;
 }
-.item form{
+
+.item form {
     margin-top: 10px;
     float: bottom;
 }
