@@ -27,21 +27,17 @@
     <main>
         <div class="head-title">
             <div class="left">
-                <h1>Dashboard</h1>
+                <h1>Cart</h1>
                 <ul class="breadcrumb">
                     <li>
-                        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('index') }}">Dashboard</a>
                     </li>
                     <li><i class='bx bx-chevron-right'></i></li>
                     <li>
-                        <a class="active" href="{{ url_for('admin_dashboard') }}">Home</a>
+                        <a class="active" href="{{ url_for('cart') }}">Home</a>
                     </li>
                 </ul>
             </div>
-            <a href="#" class="btn-download">
-                <i class='bx bxs-bell'></i>
-                <span class="text">Notifications</span>
-            </a>
         </div>
 
         <ul class="box-info">
@@ -77,25 +73,46 @@
                 <p class="separator"></p>
 
             {% if items %}
-                <div class="item-scroll">
-                <ul style="list-style: none; ">
-                    {% for item in items %}
-                        {% set item_id = item[0] %}
-                        <li>
-                            <a href="{{ url_for('item', item_id=item[0]) }}"><p
-                                    style="text-decoration: underline; color: white">{{ item[1] }}</p></a>
-                            <img src="{{ item[2] }}" alt="poster" width="100" height="100">
-                            <p class="description">{{ item[3] }}</p>
-                            <p>price: {{ item[4] }} Ksh</p>
-                            <a href="{{ item[5] }}">Watch Trailer</a>
-                            <form method="POST" action="{{ url_for('remove_from_cart', item_id=item_id) }}">
 
-                                <button type="submit">Remove from Cart</button>
-                            </form>
-                        </li>
-                        <p class="separator"></p>
-                    {% endfor %}
-                </ul>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Poster</th>
+                            <th>Movie Name</th>
+                            <th>Trailer</th>
+                            <th>Price</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="item-scroll">
+                <table>
+                    <tbody>
+                        {% for item in items %}
+                            {% set item_id = item[0] %}
+                            <tr>
+                                <td>
+                                    <img src="{{ item[2] }}" alt="poster" width="100" height="100">
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('item', item_id=item[0]) }}"><p class="scheme">{{ item[1] }}</p></a>
+                                </td>
+                                <td>
+                                    <a href="{{ item[5] }}"><img src="https://www.freepnglogos.com/uploads/youtube-logo-hd-8.png" alt=""></a>
+                                </td>
+                                <td>
+                                    <p class="scheme">{{ item[4] }} Ksh</p>
+                                </td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('remove_from_cart', item_id=item_id) }}">
+                                        <button type="submit" class="cart-remove">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
                 </div>
 
                 <br>
@@ -105,12 +122,39 @@
             </div>
             <div class="todo">
                 <div class="head">
-                    <h3>Checkout</h3>
+                    <h3>Summary</h3>
                 </div>
-                <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
-                    <button type="submit">Checkout</button>
-                    {{ total }} Ksh
-                </form>
+
+                {% if items %}
+                    <p class="separator"></p>
+                    <table>
+                    <thead>
+                        <tr>
+                            <th class="scheme">Movie Name</th>
+                            <th class="scheme">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>
+                                <p class="scheme">{{ item[1] }}</p>
+                            </td>
+                            <td>
+                                <p class="scheme">{{ item[4] }}</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <td class="total">Total:</td>
+                    <td class="total"> {{ total }}  Ksh</td>
+
+                    </tbody>
+                    </table>
+                    <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
+                        <button type="submit" class="check-out-btn"> Checkout</button>
+                    </form>
+                {% endif %}
+
             </div>
         </div>
     </main>
