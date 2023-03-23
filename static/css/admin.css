@@ -97,6 +97,7 @@ main .head-title .left .breadcrumb li a.active {
 	pointer-events: unset;
 }
 main .head-title .btn-download {
+	pointer-events: none;
 	height: 36px;
 	padding: 0 16px;
 	border-radius: 36px;
