@@ -191,7 +191,6 @@ body.dark .sidebar header .toggle {
 .sidebar.close .toggle {
   transform: translateY(-50%) rotate(0deg);
 }
-
 .sidebar .menu {
   margin-top: 0px;
 }
@@ -217,7 +216,7 @@ body.dark .sidebar header .toggle {
   width: 100%;
   outline: none;
   border: none;
-  background-color: var(--opposite-color5);
+  background-color: var(--primary-color);
   color: var(--same-color);
   border-radius: 6px;
   font-size: 17px;
@@ -386,7 +385,6 @@ body.dark .home .text {
 /* t1 */
 .socials i {
   color: var(--opposite-color);
-  background: var(--opposite-color5);
   border: 1px solid;
   border-radius: 100px;
   font-size: 20px;
