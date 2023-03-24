@@ -1,43 +1,183 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block head %}
-    <title>Order History</title>
+    <title>Purchase History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <style>
-        .container {
-            text-align: center;
+        main .table-data .todo {
+            flex-grow: 1;
+            flex-basis: 50px;
+            height: 640px;
+            color: var(--opposite-color);
         }
 
-        .container table {
-            margin: 0 auto;
+        main .table-data .order {
+            flex-grow: 1;
+            flex-basis: 60%;
+            color: var(--opposite-color);
+        }
+
+        .separator {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            height: 1px;
+            width: 100%;
+            background: var(--text-color);
+        }
+
+        .todo .content {
+            overflow-y: scroll;
+            height: 520px;
+            margin-top: -10px;
+            margin-right: -15px;
+            text-align: left;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 5px;
+
+        }
+
+        .content::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 20px;
+        }
     </style>
 {% endblock %}
 {% block content %}
-    {% if items %}
-        <div class="container">
-            <h1>Order History</h1>
-            <table class="table table-striped">
-                <thead>
-                <tr>
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Cart</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="{{ url_for('history') }}">Purchase History</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-                    <th scope="col">Movie Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item[0] }}</td>
-                        <td>{{ item[1] }} Ksh</td>
-                        <td>{{ item[2] }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-store'></i>
+                <span class="text">
+                <h3>{{ item_count }}</h3>
+                <p>Movies Available</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-box'></i>
+                <span class="text">
+                <h3>{{ owned }}</h3>
+                <p>Movies Purchased</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
+                <h3> {% if not spend %} 0 {% else %}Ksh {{ spend }} {% endif %}</h3>
+                <p>Total Spent</p>
+            </span>
+            </li>
+        </ul>
+
+
+        <div class="table-data">
+            <div class="order">
+                <div class="head">
+                    <h3>Purchase History</h3>
+                </div>
+                <p class="separator"></p>
+
+                {% if items %}
+                    <div class="item-scroll">
+                        <table>
+                            <tbody>
+                            <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Movie Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            {% for item in items %}
+                                {% set item_id = item[1] %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ item[3] }}" alt="poster" style="width: 80px; height: 100px">
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('item', item_id=item[4]) }}"><p
+                                                class="scheme">{{ item[0] }}</p></a>
+                                    </td>
+                                    <td>
+                                        <p>{{ item[2] }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="scheme">{{ item[1] }} Ksh</p>
+                                    </td>
+                                    <td>
+                                        <p class="scheme">{{ item[5] }}</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <br>
+                {% else %}
+                    <p class="empty">Your cart is empty.</p>
+                {% endif %}
+            </div>
+            <div class="todo">
+                <div class="head">
+                    <h3>Owned Movies</h3>
+                </div>
+                <div class="content">
+
+
+                    {% if items %}
+                        <p class="separator"></p>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th class="scheme">Movie Name</th>
+                                <th class="scheme">Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <td>
+                                        <p class="scheme">{{ item[0] }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="scheme">{{ item[1] }} Ksh</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+
+                    {% endif %}
+                </div>
+
+
+            </div>
         </div>
-    {% else %}
-        <div class="container">
-            <h1>Order History</h1>
-            <p>You have no order history.</p>
-        </div>
-    {% endif %}
+    </main>
+
 {% endblock %}

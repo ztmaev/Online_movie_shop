@@ -1,30 +1,133 @@
 {% extends 'base.html' %}
 {% block head %}
+    <title>Owned Movies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        main .table-data .todo {
+            flex-grow: 1;
+            flex-basis: 50px;
+            height: 640px;
+            color: var(--opposite-color);
+        }
 
-    <title>Inventory</title>
+        main .table-data .order {
+            flex-grow: 1;
+            flex-basis: 60%;
+            color: var(--opposite-color);
+        }
 
+        .separator {
+            margin-top: 0px;
+            margin-bottom: 10px;
+            height: 1px;
+            width: 100%;
+            background: var(--text-color);
+        }
+        .item-scroll{
+            height: 580px;
+            display: flex;
+            flex-flow: wrap;
+            margin-right: -15px;
+            margin-left: -25px;
+        }
+        main .box-info{
+            margin-top: 15px;
+        }
+        .item-scroll::-webkit-scrollbar {
+            width: 4px;
+
+        }
+
+        .item-scroll::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        .item-scroll::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 20px;
+        }
+        main .table-data .head {
+            margin-bottom: 15px;
+        }
+        .order{
+            overflow: hidden;
+        }
+    </style>
 {% endblock %}
-
 {% block content %}
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Library</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="{{ url_for('owned') }}">Owned</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-    <h1>Owned Items</h1>
-    <table>
-        <tr>
-            <th>Item ID</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total Price</th>
-            <th>Date</th>
-        </tr>
-        {% for item in items %}
-            <tr>
-                <td>{{ item[1] }}</td>
-                <td>{{ item[2] }}</td>
-                <td>{{ item[3] }}</td>
-                <td>{{ item[4] }}</td>
-                <td>{{ item[5] }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+        <ul class="box-info">
+            <li>
+                <i class='bx bxs-store'></i>
+                <span class="text">
+                <h3>{{ item_count }}</h3>
+                <p>Movies Available</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-box'></i>
+                <span class="text">
+                <h3>{{ owned }}</h3>
+                <p>Movies Owned</p>
+            </span>
+            </li>
+            <li>
+                <i class='bx bxs-dollar-circle'></i>
+                <span class="text">
+                <h3> {% if not spend %} 0 {% else %}Ksh {{ spend }} {% endif %}</h3>
+                <p>Total Spent</p>
+            </span>
+            </li>
+        </ul>
+
+
+        <div class="table-data">
+            <div class="order">
+                <div class="head">
+                    <h3>Owned Movies</h3>
+                </div>
+                <p class="separator"></p>
+                {% if items %}
+                    <div class="item-scroll">
+
+                            {% for item in items %}
+                <div class="item">
+                    <a href="{{ url_for('item', item_id=item[1]) }}">
+                        <img src="{{ item[4] }}" alt="{{ item[2] }} movie poster" class="index-poster">
+                        <p id="description">{{ item[3] }}</p>
+{#                        <p id="cast"><strong>Cast:</strong> {{ item[6] }}</p>#}
+                    </a>
+
+
+                </div>
+
+            {% endfor %}
+
+                    </div>
+
+                    <br>
+                {% else %}
+                    <div class="item-scroll">
+                    <p class="empty">You don't own any movies.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+    </main>
 
 {% endblock %}

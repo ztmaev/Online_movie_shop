@@ -24,9 +24,12 @@
             background: var(--text-color);
         }
 
-        .content {
+        .todo .content {
             overflow-y: scroll;
-            height: 520px;
+            height: 400px;
+            margin-top: 5px;
+            margin-right: -15px;
+            text-align: left;
         }
 
         .content::-webkit-scrollbar {
@@ -66,14 +69,14 @@
                 <i class='bx bxs-store'></i>
                 <span class="text">
                 <h3>{{ item_count }}</h3>
-                <p>Movies in stock</p>
+                <p>Movies Available</p>
             </span>
             </li>
             <li>
                 <i class='bx bxs-box'></i>
                 <span class="text">
                 <h3>{{ owned }}</h3>
-                <p>Movies purchased</p>
+                <p>Movies Owned</p>
             </span>
             </li>
             <li>
@@ -121,7 +124,7 @@
                                         <p>{{ item[3] }}</p>
                                     </td>
                                     <td>
-                                        <a href="{{ item[5] }}"><img
+                                        <a href="{{ item[5] }}" target="_blank"><img
                                                 src="https://www.freepnglogos.com/uploads/youtube-logo-hd-8.png" alt=""></a>
                                     </td>
                                     <td>
@@ -171,16 +174,20 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-                            <td class="total">Total:</td>
-                            <td class="total"> {{ total }} Ksh</td>
+
 
                             </tbody>
                         </table>
-                        <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
-                            <button type="submit" class="check-out-btn"> Checkout</button>
-                        </form>
+
                     {% endif %}
                 </div>
+            <p class="separator"></p>
+                    <p class="total">Total</p>
+                    <p class="total"> {{ total }} Ksh</p>
+            <p class="separator"></p>
+                <form method="POST" action="{{ url_for('checkout') }}" style="margin: 0 auto" class="check-out">
+                    <button type="submit" class="check-out-btn"> Checkout</button>
+                </form>
 
             </div>
         </div>

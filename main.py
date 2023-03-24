@@ -90,8 +90,33 @@ def owned():
         items = cursor.fetchall()
         # remove duplicates
         items = list(set(items))
+        # get the movie info from the id in items
+        # get the movie info from the id in items
+        item_info_list = []
+        for item in items:
+            item_id = item[1]
+            cursor.execute('SELECT * FROM stock WHERE item_id = ?', (item_id,))
+            item_info = cursor.fetchone()
+            if item_info is not None:
+                # append the item_id to the tuple
+                item_info_list.append((item_id,) + item_info)
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+
+        # get total number of movies owned by user
+        user_id = session['username']
+        cursor.execute('SELECT COUNT(*) FROM history WHERE user_id = ?', (user_id,))
+        total_items = cursor.fetchone()
+        owned = total_items[0]
+
+        # get the total amount spent by user
+        cursor.execute('SELECT SUM(price) FROM history WHERE user_id = ?', (user_id,))
+        total_items = cursor.fetchone()
+        spend = total_items[0]
         conn.close()
-        return render_template('owned.html', items=items)
+        return render_template('owned.html', items=item_info_list, item_count=item_count, owned=owned, spend=spend)
     else:
         return redirect(url_for('login'))
 
@@ -673,13 +698,33 @@ def history():
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
         cursor.execute(
-            'SELECT stock.moviename, stock.price, history.date FROM history INNER JOIN stock ON history.item_id = stock.item_id WHERE history.user_id = ?',
+            'SELECT stock.moviename, stock.price, stock.description, stock.poster, stock.item_id, history.date '
+            'FROM history '
+            'INNER JOIN stock ON history.item_id = stock.item_id '
+            'WHERE history.user_id = ?',
             (username,))
         items = cursor.fetchall()
+
+        # get total number of items
+        cursor.execute('SELECT COUNT(*) FROM stock')
+        total_items = cursor.fetchone()
+        item_count = total_items[0]
+
+        # get total number of movies owned by user
+        cursor.execute('SELECT COUNT(*) FROM history WHERE user_id = ?', (username,))
+        total_items = cursor.fetchone()
+        owned = total_items[0]
+
+        # get the total amount spent by user
+        cursor.execute('SELECT SUM(price) FROM history WHERE user_id = ?', (username,))
+        total_items = cursor.fetchone()
+        spend = total_items[0]
+
         conn.close()
-        return render_template('history.html', items=items)
+        return render_template('history.html', items=items, item_count=item_count, owned=owned, spend=spend)
     else:
         return redirect(url_for('login'))
+
 
 
 @app.context_processor

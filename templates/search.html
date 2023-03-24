@@ -2,6 +2,37 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
     <title>Search Results for "{{ search_term }}"</title>
+    <style>
+    .item-scroll{
+            height: 640px;
+            display: flex;
+            flex-flow: wrap;
+        margin-top: 25px;
+            margin-right: 5px;
+            margin-left: 0px;
+        }
+        .item-scroll::-webkit-scrollbar {
+            width: 4px;
+
+        }
+
+        .item-scroll::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        .item-scroll::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 20px;
+        }
+        main .table-data .head {
+            margin-bottom: 15px;
+        }
+        .container-results{
+            height: 745px;
+            overflow: hidden;
+            margin-bottom: -10px;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div class="container-search">
@@ -18,7 +49,7 @@
                     <i class='bx bxs-box'></i>
                     <span class="text">
                 <h3>{{ owned }}</h3>
-                <p>Movies purchased</p>
+                <p>Movies Owned</p>
             </span>
                 </li>
                 <li>
@@ -36,14 +67,15 @@
 
             {% if movies %}
                 <div class="item-list">
+                <div class="item-scroll">
                     {% for movie in movies %}
                         <div class="item">
-                            <a href="{{ url_for('item', item_id=movie['item_id']) }}"><h2
-                                    class="headings">{{ movie['moviename'] }}</h2></a>
+                            <a href="{{ url_for('item', item_id=movie['item_id']) }}">
                             <img src="{{ movie['poster'] }}" alt="{{ movie['moviename'] }} poster">
                             <p id="description">{{ movie['description'] }}</p>
                             <p id="cast"><strong> Cast</strong>: {{ movie['cast_names'] }}</p>
                             <p><strong> Price</strong>: {{ movie['price'] }} Ksh</p>
+                            </a>
 
                             {% if session['admin'] %}
                                 <form action="{{ url_for('item_delete', item_id=movie[0]) }}" method="post">
@@ -69,6 +101,7 @@
                             {% endif %}
                         </div>
                     {% endfor %}
+                </div>
                 </div>
             {% else %}
                 <p>No movies found.</p>
