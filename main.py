@@ -582,7 +582,7 @@ def add_to_cart():
 
         conn.close()
 
-        return redirect(url_for('index'))
+        return redirect(url_for('cart'))
     else:
         return redirect(url_for('login'))
 
@@ -804,11 +804,28 @@ def item(item_id):
     # Get the movie details from the database
     cursor.execute('SELECT * FROM stock WHERE item_id = ?', (item_id,))
     item = cursor.fetchone()
+    # get a list of owned movies
+    cursor.execute('SELECT item_id FROM history WHERE user_id = ?', (session['username'],))
+    owned = cursor.fetchall()
+    owned_movie_ids = []
+    for movie in owned:
+        owned_movie_ids.append(movie[0])
+
+    # get items in cart
+    cursor.execute('SELECT item_id FROM cart WHERE user_id = ?', (session['username'],))
+    cart = cursor.fetchall()
+    cart_movie_ids = []
+    for movie in cart:
+        cart_movie_ids.append(movie[0])
+
+
+
+
 
     conn.close()
 
     if item:
-        return render_template('item.html', item=item)
+        return render_template('item.html', item=item, owned=owned_movie_ids, cart=cart_movie_ids)
     else:
         flash('Item not found.')
         return redirect(url_for('index'))
