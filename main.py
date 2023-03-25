@@ -641,23 +641,6 @@ def remove_from_cart(item_id):
         return redirect(url_for('login'))
 
 
-@app.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    if 'username' in session:
-        username = session['username']
-        cart_items = session.get('cart_items', [])
-        conn = sqlite3.connect('users.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT stock.price FROM cart JOIN stock ON cart.item_id=stock.item_id WHERE cart.user_id=?',
-                       (username,))
-        prices = cursor.fetchall()
-        total = sum([int(price[0].replace('$', '')) for price in prices])
-        conn.close()
-        return render_template('checkout.html', items=cart_items, total=total)
-    else:
-        return redirect(url_for('login'))
-
-
 @app.route('/complete_checkout', methods=['POST'])
 def complete_checkout():
     if 'username' in session:
@@ -686,7 +669,7 @@ def complete_checkout():
         cursor.execute('DELETE FROM cart WHERE user_id = ?', (username,))
         conn.commit()
         conn.close()
-        return redirect(url_for('cart'))
+        return redirect(url_for('owned'))
     else:
         return redirect(url_for('login'))
 
